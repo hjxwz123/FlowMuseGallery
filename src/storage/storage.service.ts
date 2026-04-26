@@ -156,7 +156,7 @@ export class StorageService {
   ) {}
 
   private localUploadRoot() {
-    return join(process.cwd(), 'uploads');
+    return resolve(process.env.UPLOADS_DIR || join(process.cwd(), 'uploads'));
   }
 
   private localPublicBaseUrl() {

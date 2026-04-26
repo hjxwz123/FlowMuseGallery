@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import express from 'express';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
@@ -36,7 +36,8 @@ async function bootstrap() {
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
   app.setGlobalPrefix('api');
-  app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
+  const uploadsDir = resolve(process.env.UPLOADS_DIR || join(process.cwd(), 'uploads'));
+  app.use('/uploads', express.static(uploadsDir));
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalInterceptors(new ResponseWrapperInterceptor());
   app.useGlobalPipes(

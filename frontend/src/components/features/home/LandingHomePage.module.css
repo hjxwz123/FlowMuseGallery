@@ -318,6 +318,22 @@
   transform: scale(0.96);
 }
 
+.capsuleMenuIconItem {
+  min-width: 42px;
+  width: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.capsuleMenuIconItem svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
 .enterButton {
   position: relative;
   display: inline-flex;
@@ -2171,6 +2187,12 @@
     height: 40px;
     padding: 0 12px;
     font-size: 0.85rem;
+  }
+
+  .capsuleMenuIconItem {
+    flex: 0 0 40px;
+    width: 40px;
+    padding: 0;
   }
 
   .gallerySection {

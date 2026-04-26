@@ -8,6 +8,7 @@ build
 frontend/.next
 frontend/out
 frontend/build
+release
 *.tsbuildinfo
 
 # uploads / runtime

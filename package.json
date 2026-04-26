@@ -2,7 +2,7 @@
   "name": "flowmuse",
   "version": "1.0.0",
   "private": true,
-  "main": "dist/main.js",
+  "main": "electron/main.cjs",
   "scripts": {
     "start": "node dist/src/main.js",
     "start:frontend": "cd frontend && BACKEND_URL=${BACKEND_URL:-http://127.0.0.1:${PORT:-3000}} FRONTEND_PORT=${FRONTEND_PORT:-3001} npm run start",
@@ -14,8 +14,11 @@
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "build:frontend": "cd frontend && npm run build",
     "build:all": "npm run build && npm run build:frontend",
+    "desktop:dev": "npm run build:all && electron . --dev",
+    "desktop:pack": "npm run build:all && electron-builder --dir",
+    "desktop:dist": "npm run build:all && electron-builder",
     "prisma:generate": "prisma generate",
-    "prisma:init": "prisma db execute --schema prisma/schema.prisma --file prisma/migrations/20260425045042_personal_sqlite/migration.sql && npm run prisma:seed",
+    "prisma:init": "node scripts/init-sqlite.cjs && npm run prisma:seed",
     "prisma:migrate": "npm run prisma:init",
     "prisma:backfill:storyboard": "node prisma/backfill-video-task-storyboard-columns.js",
     "prisma:studio": "prisma studio",
@@ -56,6 +59,8 @@
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "concurrently": "^9.2.1",
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
     "eslint": "^9.39.4",
     "globals": "^17.4.0",
     "jiti": "^2.6.1",
@@ -65,5 +70,51 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1"
+  },
+  "build": {
+    "appId": "com.flowmuse.personal",
+    "productName": "FlowMuse",
+    "electronVersion": "31.7.7",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "scripts/**/*",
+      "dist/**/*",
+      "frontend/dist/**/*",
+      "prisma/schema.prisma",
+      "prisma/migrations/**/*",
+      "prisma/seed.js",
+      "prisma/default-*.json",
+      "prisma/personal-sqlite-indexes.json",
+      "node_modules/**/*",
+      {
+        "from": "node_modules/.prisma",
+        "to": "node_modules/.prisma",
+        "filter": [
+          "**/*"
+        ]
+      },
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/.prisma/**/*",
+      "node_modules/@prisma/**/*",
+      "node_modules/sharp/**/*",
+      "node_modules/@img/**/*"
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    }
   }
 }

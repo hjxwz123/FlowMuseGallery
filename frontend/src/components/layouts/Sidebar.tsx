@@ -13,12 +13,14 @@ import {
   ClipboardList,
   Compass,
   FolderKanban,
+  Github,
   PenTool,
   Sparkles,
 } from 'lucide-react'
 
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import { cn } from '@/lib/utils/cn'
+import { PERSONAL_GITHUB_URL } from '@/lib/utils/siteSettings'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { UserMenu } from './UserMenu'
 
@@ -239,6 +241,22 @@ export function Sidebar({ forceCollapsed: _forceCollapsed = false }: SidebarProp
               />
             </svg>
           </Link>
+        </TooltipShell>
+
+        <TooltipShell label="GitHub">
+          <a
+            href={PERSONAL_GITHUB_URL}
+            target="_blank"
+            rel="noreferrer"
+            className={cn(
+              'mt-1 flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.06] text-stone-500 transition-all duration-300',
+              'hover:-translate-y-0.5 hover:border-black/10 hover:bg-black/[0.05] hover:text-stone-950',
+              'dark:border-white/[0.07] dark:text-[#888] dark:hover:border-white/[0.12] dark:hover:bg-white/[0.07] dark:hover:text-white'
+            )}
+            aria-label="GitHub"
+          >
+            <Github className="h-5 w-5 stroke-[2]" />
+          </a>
         </TooltipShell>
 
         <nav className="relative flex w-full flex-1 flex-col items-center justify-center gap-2">

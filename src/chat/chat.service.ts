@@ -654,36 +654,55 @@ export class ChatService {
       take: this.resolveRecentMessageTake(conversation.model.maxContextRounds),
     });
     const recentMessages = recentMessagesDesc.reverse();
-    const completion = autoProjectAgent?.enabled
-      ? await this.autoProjectWorkflow.completeTurn({
+    let completion: { content: string; providerData?: unknown };
+    if (autoProjectAgent?.enabled) {
+      try {
+        completion = await this.autoProjectWorkflow.completeTurn({
           userId,
           conversationId,
           conversation,
           recentMessages,
           autoProjectAgent,
           userInput: content,
-        })
-      : mediaAgent?.enabled
-        ? await this.completeMediaAgentTurn({
-            userId,
-            conversationId,
-            conversation,
-            recentMessages,
-            mediaAgent,
-            sourceUserMessageId: userMessage.id.toString(),
-          })
-        : await this.requestChatCompletion(
-            conversation,
-            this.injectSystemContextIntoUpstream(
-              await this.toUpstreamMessages(recentMessages, {
-                includeImages: supportsImageInput,
-              }),
-              conversation.model.systemPrompt,
-              projectContextSystemMessage,
-              projectActionSystemMessage,
-              fileContext.systemMessage,
-            ),
-          );
+        });
+      } catch (error) {
+        completion = this.buildVisibleAgentErrorCompletion({
+          mode: 'auto',
+          error,
+          recentMessages,
+        });
+      }
+    } else if (mediaAgent?.enabled) {
+      try {
+        completion = await this.completeMediaAgentTurn({
+          userId,
+          conversationId,
+          conversation,
+          recentMessages,
+          mediaAgent,
+          sourceUserMessageId: userMessage.id.toString(),
+        });
+      } catch (error) {
+        completion = this.buildVisibleAgentErrorCompletion({
+          mode: 'media',
+          error,
+          recentMessages,
+        });
+      }
+    } else {
+      completion = await this.requestChatCompletion(
+        conversation,
+        this.injectSystemContextIntoUpstream(
+          await this.toUpstreamMessages(recentMessages, {
+            includeImages: supportsImageInput,
+          }),
+          conversation.model.systemPrompt,
+          projectContextSystemMessage,
+          projectActionSystemMessage,
+          fileContext.systemMessage,
+        ),
+      );
+    }
 
     const assistantMessage = await this.prisma.chatMessage.create({
       data: {
@@ -1169,8 +1188,10 @@ export class ChatService {
         take: this.resolveRecentMessageTake(conversation.model.maxContextRounds),
       });
       const recentMessages = recentMessagesDesc.reverse();
-      const completion = autoProjectAgent?.enabled
-        ? await this.autoProjectWorkflow.completeTurn({
+      let completion: { content: string; providerData?: unknown };
+      if (autoProjectAgent?.enabled) {
+        try {
+          completion = await this.autoProjectWorkflow.completeTurn({
             userId,
             conversationId,
             conversation,
@@ -1180,34 +1201,51 @@ export class ChatService {
             onStatus: (message) => {
               sendSse({ type: 'status', stage: 'planning', message });
             },
-          })
-        : mediaAgent?.enabled
-          ? await this.completeMediaAgentTurn({
-              userId,
-              conversationId,
-              conversation,
-              recentMessages,
-              mediaAgent,
-              sourceUserMessageId: userMessage.id.toString(),
-            })
-          : await this.requestChatCompletionStream(
-              conversation,
-              this.injectSystemContextIntoUpstream(
-                await this.toUpstreamMessages(recentMessages, {
-                  includeImages: supportsImageInput,
-                }),
-                conversation.model.systemPrompt,
-                projectContextSystemMessage,
-                projectActionSystemMessage,
-                fileContext.systemMessage,
-              ),
-              (chunk) => {
-                sendSse({ type: 'delta', content: chunk });
-              },
-              (chunk) => {
-                sendSse({ type: 'reasoning_delta', content: chunk });
-              },
-            );
+          });
+        } catch (error) {
+          completion = this.buildVisibleAgentErrorCompletion({
+            mode: 'auto',
+            error,
+            recentMessages,
+          });
+        }
+      } else if (mediaAgent?.enabled) {
+        try {
+          completion = await this.completeMediaAgentTurn({
+            userId,
+            conversationId,
+            conversation,
+            recentMessages,
+            mediaAgent,
+            sourceUserMessageId: userMessage.id.toString(),
+          });
+        } catch (error) {
+          completion = this.buildVisibleAgentErrorCompletion({
+            mode: 'media',
+            error,
+            recentMessages,
+          });
+        }
+      } else {
+        completion = await this.requestChatCompletionStream(
+          conversation,
+          this.injectSystemContextIntoUpstream(
+            await this.toUpstreamMessages(recentMessages, {
+              includeImages: supportsImageInput,
+            }),
+            conversation.model.systemPrompt,
+            projectContextSystemMessage,
+            projectActionSystemMessage,
+            fileContext.systemMessage,
+          ),
+          (chunk) => {
+            sendSse({ type: 'delta', content: chunk });
+          },
+          (chunk) => {
+            sendSse({ type: 'reasoning_delta', content: chunk });
+          },
+        );
+      }
 
       if (mediaAgent?.enabled || autoProjectAgent?.enabled) {
         sendSse({ type: 'delta', content: completion.content });
@@ -2565,9 +2603,9 @@ export class ChatService {
       referenceImages = [firstFrame];
     }
 
-    const cappedImages = referenceImages.slice(0, totalVisualBudget);
-    const remainingVisualBudget = Math.max(0, totalVisualBudget - cappedImages.length);
-    const cappedVideos = referenceVideos.slice(0, remainingVisualBudget);
+    const cappedVideos = referenceVideos.slice(0, totalVisualBudget);
+    const remainingVisualBudget = Math.max(0, totalVisualBudget - cappedVideos.length);
+    const cappedImages = referenceImages.slice(0, remainingVisualBudget);
     const visualCount = cappedImages.length + cappedVideos.length;
     const cappedAudios = input.currentAudios
       .map((item) => item.trim())
@@ -3357,9 +3395,14 @@ export class ChatService {
     const fallbackVideo = input.latestContextAsset?.resultUrl ?? null;
 
     if (this.isWanxR2vVideoModel(model)) {
+      const mergedReferenceVideos = [...input.currentVideos];
+      if (mergedReferenceVideos.length === 0 && fallbackVideo) {
+        mergedReferenceVideos.push(fallbackVideo);
+      }
+
       return this.buildWanxR2vContextVideoParameters({
         currentImages: input.currentImages,
-        currentVideos: input.currentVideos,
+        currentVideos: mergedReferenceVideos,
         currentAudios: input.currentAudios,
         firstFrameImage: fallbackImage,
       });
@@ -3901,6 +3944,47 @@ export class ChatService {
         return liveTaskRef ? { ...taskRef, ...liveTaskRef } : taskRef;
       }),
     }));
+  }
+
+  private buildVisibleAgentErrorCompletion(input: {
+    mode: 'auto' | 'media';
+    error: unknown;
+    recentMessages: Array<{ providerData: unknown }>;
+  }) {
+    const message = this.normalizeExceptionMessage(input.error);
+    const label = input.mode === 'auto' ? '全自动模式执行失败' : 'Agent 模式执行失败';
+    this.logger.error(
+      `${label}: ${message}`,
+      input.error instanceof Error ? input.error.stack : undefined,
+    );
+
+    const providerData: Record<string, unknown> = {
+      agentError: {
+        mode: input.mode,
+        message,
+      },
+    };
+
+    for (const recentMessage of [...input.recentMessages].reverse()) {
+      if (input.mode === 'auto') {
+        const autoProjectAgent = extractAutoProjectAgentFromProviderData(recentMessage.providerData ?? null);
+        if (autoProjectAgent) {
+          providerData.autoProjectAgent = autoProjectAgent;
+          break;
+        }
+      } else {
+        const mediaAgent = this.extractMediaAgentFromProviderData(recentMessage.providerData ?? null);
+        if (mediaAgent) {
+          providerData.mediaAgent = mediaAgent;
+          break;
+        }
+      }
+    }
+
+    return {
+      content: `${label}：${message}`,
+      providerData,
+    };
   }
 
   private asJsonRecord(value: unknown): Record<string, unknown> {
