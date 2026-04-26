@@ -74,7 +74,7 @@ function pipeChildLogs(child, prefix) {
 function runNodeScript(scriptPath, env) {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [scriptPath], {
-      cwd: app.getAppPath(),
+      cwd: path.dirname(app.getAppPath()),
       env: nodeRuntimeEnv(env),
       stdio: ['ignore', 'pipe', 'pipe'],
     });
