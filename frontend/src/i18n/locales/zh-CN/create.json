@@ -1,0 +1,423 @@
+{
+  "title": "快速模式",
+  "subtitle": "让AI帮你创作精美的图片和视频",
+  "hub": {
+    "badge": "创作中心",
+    "title": "统一创作入口",
+    "subtitle": "常用创作入口已整合到这里，按创作流程快速跳转。",
+    "workspaceTag": "当前页面",
+    "items": {
+      "workspace": {
+        "title": "创作工作台",
+        "description": "继续在当前页完成图片/视频生成和参数调整。"
+      },
+      "inspiration": {
+        "title": "我的作品",
+        "description": "查看本地生成的图片和视频作品。"
+      },
+      "templates": {
+        "title": "网络提示词",
+        "description": "从网络提示词快速获取灵感并套用到创作页。"
+      },
+      "tools": {
+        "title": "网络提示词",
+        "description": "浏览网络提示词，快速启动图片或视频创作。"
+      }
+    },
+    "stats": {
+      "templates": "{count} 条提示词",
+      "tools": "{count} 条提示词"
+    },
+    "open": "进入"
+  },
+  "toolHub": {
+    "modeTitle": "创作模式"
+  },
+  "tabs": {
+    "image": "图片创作",
+    "video": "视频创作"
+  },
+  "modes": {
+    "template": "使用网络提示词",
+    "custom": "自定义创作"
+  },
+  "templates": {
+    "title": "选择网络提示词",
+    "subtitle": "从网络提示词开始，让 AI 创作更简单",
+    "categories": {
+      "all": "全部",
+      "portrait": "人物肖像",
+      "landscape": "风景照片",
+      "product": "产品摄影",
+      "art": "艺术创作",
+      "video": "视频生成"
+    },
+    "useTemplate": "使用此提示词",
+    "examplePrompts": "示例提示词：",
+    "difficulty": {
+      "beginner": "新手",
+      "intermediate": "进阶",
+      "advanced": "高级"
+    },
+    "noTemplates": "该分类暂无{type}提示词",
+    "backToTemplates": "返回提示词选择",
+    "currentTemplate": "当前提示词：{name}"
+  },
+  "steps": {
+    "step1": "选择AI模型",
+    "step2": "描述你想要创作的内容",
+    "step3": "调整参数（可选）"
+  },
+  "projectContext": {
+    "title": "项目上下文",
+    "subtitle": "选择项目后，勾选的项目素材会和本地上传素材一起作为参考输入。",
+    "manage": "管理项目",
+    "loading": "正在加载项目...",
+    "selectLabel": "选择项目（可选）",
+    "none": "不使用项目",
+    "assetCount": "{count} 个素材",
+    "inspirationCount": "{count} 条灵感",
+    "promptCount": "{count} 条提示词",
+    "selectedCount": "已选 {count} 个项目素材",
+    "descriptionEmpty": "这个项目还没有描述，你可以去项目管理页补充背景信息。",
+    "coverImage": "封面图",
+    "coverVideo": "封面视频",
+    "emptyTitle": "还没有可用项目",
+    "emptyDescription": "先去项目管理页新建项目，上传素材或导入你自己的历史作品，再回到这里直接复用。",
+    "unsupportedHint": "当前模型不支持参考素材输入，但你依然可以把任务归档到项目里，并让项目描述参与提示词优化。",
+    "assetSectionTitle": "选择要参与创作的项目素材",
+    "assetSectionHint": "这些素材会与本地上传素材同时参与本次生成。",
+    "openAssetPicker": "选择项目素材",
+    "assetModalTitle": "选择项目素材",
+    "done": "完成选择",
+    "moreSelected": "另有 {count} 个",
+    "noAssets": "这个项目还没有素材，先去项目管理页上传或导入一些内容吧。",
+    "noUsableAssets": "这个项目有素材，但当前模式只能使用其中的可兼容素材。",
+    "kindImage": "图片",
+    "kindVideo": "视频",
+    "fromTask": "我的作品",
+    "fromUpload": "手动上传"
+  },
+  "models": {
+    "title": "选择AI模型",
+    "subtitle": "每个模型都有不同的风格和特点，选择最适合你的",
+    "noModels": "暂无可用的{type}生成模型",
+    "features": {
+      "async": "异步生成",
+      "imageToImage": "图生图",
+      "highRes": "高清"
+    }
+  },
+  "form": {
+    "model": {
+      "label": "选择模型",
+      "placeholder": "请选择生成模型"
+    },
+    "prompt": {
+      "label": "创作描述",
+      "placeholder": "例如：一位穿着职业装的年轻女性，自信的微笑，办公室背景...",
+      "placeholderVideo": "例如：海浪轻柔拍打沙滩，日落时分，慢动作...",
+      "hint": " 提示：详细描述能帮助AI更好地理解你的需求，输入 @ 可引用已上传或已选择的图片、视频或音频",
+      "optimize": "AI 优化提示词",
+      "optimizing": "优化中...",
+      "optimizedResult": "AI 优化结果（选择一个使用）",
+      "useOptimized": "使用此版本",
+      "includeImages": "包含参考图分析",
+      "optimizeError": "提示词优化失败，请重试",
+      "mentionUnavailable": "请先上传或选择可引用的图片、视频或音频后再使用 @ 引用",
+      "mentionButtonTitle": "引用已上传或已选择的素材",
+      "mentionPickerTitle": "选择要引用的素材",
+      "mentionPickerCount": "{count} 个素材"
+    },
+    "negativePrompt": {
+      "label": "高级选项：排除不想要的元素（可选）",
+      "placeholder": "例如：模糊、低质量、扭曲...",
+      "hint": "描述你不希望出现在作品中的内容"
+    },
+    "uploadReference": {
+      "label": "上传参考图片（可选）",
+      "labelVideo": "上传首尾帧",
+      "labelVideoReference": "上传参考图",
+      "labelDoubaoReferenceImages20": "上传参考图片",
+      "labelDoubaoReferenceVideos20": "上传参考视频",
+      "labelDoubaoReferenceAudios20": "上传参考音频",
+      "labelDoubaoFrames20": "上传首尾帧",
+      "labelWanxReferenceImages": "上传参考图片",
+      "labelWanxReferenceVideos": "上传参考视频",
+      "labelWanxReferenceAudios": "上传参考音频",
+      "labelWanxDrivingAudio": "上传驱动音频",
+      "labelWanxFirstFrame": "上传首帧图片",
+      "labelWanxLastFrame": "上传尾帧图片",
+      "labelWanxVideoContinuation": "视频续写",
+      "labelWanxContinuationVideo": "上传续写视频",
+      "optional": "（可选）",
+      "mode": {
+        "imageToImage": "图生图模式",
+        "textToImage": "文生图模式"
+      },
+      "selected": "已选择 {count} 张图片",
+      "maxFiles": "最多 {max} 张",
+      "maxItems": "最多 {max} 个文件",
+      "dropzoneIdle": "拖拽文件到这里，或点击上传",
+      "dropzoneDragging": "松开鼠标上传文件",
+      "fileLimitHint": "最多 {max} 个文件，单个不超过 {size}MB",
+      "hint": "可选：上传参考图片进行图生图创作",
+      "hintWithImages": "已选择 {count} 张图片，将使用图生图模式",
+      "hintVideoReference": "可选：上传参考图进行图生视频生成",
+      "hintVideoReferenceWithImages": "已选择 {count} 张参考图，将用于视频生成",
+      "hintDoubaoVideoExclusive": "注意：豆包的参考图与首尾帧只能二选一",
+      "hintDoubaoReferenceImages": "可选：上传1-4张参考图（与首尾帧互斥）",
+      "hintDoubaoReferenceImages20": "可选：上传 1-9 张参考图片。",
+      "hintDoubaoReferenceVideos20": "可选：上传 1-3 个参考视频。",
+      "hintDoubaoReferenceAudios20": "可选：上传 1-3 段参考音频。不能单独使用，需要至少搭配 1 个参考图片或参考视频。",
+      "hintDoubaoFrames20": "可选：上传 1-2 张图片。第 1 张作为首帧，第 2 张作为尾帧。",
+      "hintWanxUpload": "万相支持图片、视频、音频混合参考。参考图片与参考视频总数最多 5 个；wan2.7 还支持同时上传 1 张首帧图片。若包含参考视频，时长可选 2-10 秒；若仅使用参考图片或首帧，时长可选 2-15 秒。",
+      "hintWanxReferenceImages": "可选：上传参考图片。它会和参考视频一起参与角色/场景控制，二者总数最多 5 个。",
+      "hintWanxReferenceVideos": "可选：上传参考视频。只要包含参考视频，视频时长就必须在 2-10 秒之间。",
+      "hintWanxReferenceAudios": "可选：上传参考音频，用于指定对应参考主体的音色。参考音频数量不能超过参考图片和参考视频总数。",
+      "hintWanxFirstFrame": "可选：上传 1 张首帧图片。它可以和参考图片、参考视频同时存在，不占用参考素材互斥关系。",
+      "hintWanxFirstFrameRatio": "已上传首帧图片时，万相会自动按首帧宽高比生成视频，此时画面比例设置不会生效。",
+      "hintFirstFrame": "已上传首帧图片，视频将从此图片开始",
+      "hintFirstAndLastFrame": "已上传首帧和尾帧图片，视频将从首帧过渡到尾帧",
+      "hintDoubaoVideo": "可选：上传1-2张图片。第1张作为首帧，第2张作为尾帧（可选）"
+    },
+    "parameters": {
+      "label": "调整参数（可选）",
+      "aspectRatio": "画面比例",
+      "imageSize": "图片分辨率",
+      "imageResolution": "图片尺寸",
+      "mjBotType": "模型版本",
+      "mjAdvanced": "更多参数",
+      "mjVersion": "版本 (--v)",
+      "mjQuality": "质量 (--q)",
+      "mjStyleRaw": "风格 (--style)",
+      "mjStylize": "风格化 (--s)",
+      "mjChaos": "混乱度 (--c)",
+      "mjWeird": "怪异度 (--weird)",
+      "mjIw": "图片权重 (--iw)",
+      "mjNo": "排除内容 (--no)",
+      "mjNoPlaceholder": "如：模糊, 文字",
+      "mjSeedPlaceholder": "随机数字",
+      "mjTile": "平铺模式 (--tile)",
+      "mjPersonalize": "个性化 (--p)",
+      "videoSize": "视频尺寸",
+      "videoDuration": "视频时长",
+      "videoResolution": "视频分辨率",
+      "aspectRatios": {
+        "1:1": "1:1 正方形",
+        "3:4": "3:4 竖版",
+        "4:3": "4:3 横版",
+        "16:9": "16:9 宽屏",
+        "9:16": "9:16 竖屏"
+      },
+      "duration": "视频时长",
+      "durations": {
+        "5": "5秒",
+        "10": "10秒",
+        "15": "15秒"
+      },
+      "resolution": "视频清晰度",
+      "generateAudio": "生成声音",
+      "generateAudioHint": "Seedance 2.0 会根据画面与提示词自动生成匹配的人声、音效与背景音乐。",
+      "switchOn": "已开启",
+      "switchOff": "已关闭",
+      "resolutions": {
+        "720p": "720p 高清",
+        "1080p": "1080p 全高清"
+      },
+      "seed": "随机种子",
+      "style": "风格"
+    }
+  },
+  "videoAssistant": {
+    "badge": "导演助手",
+    "title": "不会写提示词，也能快速起稿",
+    "subtitle": "先用一句话和几个简单选项描述你的想法，系统会用 AI 帮你生成 1 个更专业的视频创作版本。",
+    "ideaLabel": "一句话想法",
+    "ideaPlaceholder": "例如：做一个高级护肤品广告视频，干净、治愈、有电影感",
+    "subjectLabel": "主体",
+    "subjectPlaceholder": "例如：一瓶面霜 / 一位女生 / 一辆跑车",
+    "sceneLabel": "场景",
+    "scenePlaceholder": "例如：晨光浴室 / 城市夜景 / 海边公路",
+    "actionLabel": "关键动作",
+    "actionPlaceholder": "例如：缓慢转身看向镜头 / 海浪轻拍礁石",
+    "mustKeepLabel": "必须保留",
+    "mustKeepPlaceholder": "例如：品牌 logo 清晰、人物始终居中、保持暖金色调",
+    "goalLabel": "创作目标",
+    "styleLabel": "视觉风格",
+    "cameraLabel": "镜头语言",
+    "paceLabel": "节奏",
+    "audioLabel": "声音策略",
+    "generate": "AI 生成专业版本",
+    "generating": "AI 正在生成专业版本...",
+    "generateHint": "AI 会综合你的想法、镜头、节奏和声音策略，直接生成 1 个可用于视频模型的专业提示词。",
+    "generatedCount": "已生成 {count} 个专业版本",
+    "useVariant": "使用这个专业版本",
+    "emptyError": "请先填写一点想法、主体、场景或动作，再生成专业版本",
+    "generateError": "导演助手生成失败，请重试",
+    "loginRequired": "请先填写内容后再使用导演助手",
+    "secondsSuffix": "秒",
+    "mediaHint": "结合已上传素材，优先保持主体、运镜或声音氛围的一致性。",
+    "projectAssetHint": "已选择 {count} 个项目素材，请在提示词中兼顾这些素材的风格或主体一致性。",
+    "audioGenerateHint": "如果模型支持，将自动生成更匹配画面的声音与氛围。",
+    "prefix": {
+      "idea": "核心想法：",
+      "subject": "主体：",
+      "scene": "场景：",
+      "action": "动作：",
+      "mustKeep": "必须保留：",
+      "duration": "建议时长 ",
+      "ratio": "画面比例 "
+    },
+    "audioDirectives": {
+      "immersive": "声音上以沉浸式环境音、细腻音效和情绪音乐为主，和画面节奏同步。",
+      "narration": "声音上突出清晰的人声表达，适合口播、讲解或广告台词。",
+      "ambience": "声音上以自然环境音和氛围感铺陈为主，不要过重的人声表演。",
+      "silent": "按无声视频思路构图和叙事，强调画面信息本身。"
+    },
+    "variants": {
+      "professional": {
+        "title": "专业版本",
+        "description": "AI 整合你的创意信息后生成的可直接使用版本"
+      },
+      "balanced": {
+        "title": "平衡版",
+        "description": "更稳妥、适合直接提交生成"
+      },
+      "cinematic": {
+        "title": "电影增强",
+        "description": "更强调镜头、光影和氛围推进"
+      },
+      "creative": {
+        "title": "创意扩展",
+        "description": "更有记忆点和传播感"
+      }
+    },
+    "variantDirectives": {
+      "balanced": "要求主体清晰、动作连贯、空间关系明确，避免突兀变形和无关元素，整体完成度高、稳定可控。",
+      "cinematic": "强调景别变化、前后景层次、光影过渡与情绪推进，让镜头像精致短片一样有呼吸感和节奏感。",
+      "creative": "加入更强的开场钩子和视觉记忆点，让转场、动作和氛围更有传播感，但主体识别必须稳定、叙事必须聚焦。"
+    },
+    "refineTitle": "快捷修正",
+    "refineSubtitle": "对当前描述还不满意时，直接追加一个修正方向。",
+    "refineApplied": "已把修正方向追加到当前描述",
+    "refines": {
+      "ad": "更有展示感",
+      "cinematic": "更电影感",
+      "natural": "动作更自然",
+      "stable": "镜头更稳定",
+      "rhythm": "节奏更利落"
+    },
+    "refinePatches": {
+      "ad": "进一步突出主体质感、干净构图和画面氛围，让结果更高级、克制、精致。",
+      "cinematic": "进一步增强电影感，强调镜头层次、光影氛围、景深关系和情绪推进，让画面更像短片。",
+      "natural": "让人物或主体动作更自然连贯，避免夸张、僵硬和突兀变化，保持真实可信。",
+      "stable": "镜头更稳定、更克制，减少无意义晃动和频繁切换，让观看体验更专业、更舒服。",
+      "rhythm": "整体节奏更利落，开场更抓人，动作推进更明确，转场和情绪起伏更顺滑。"
+    },
+    "options": {
+      "goals": {
+        "brand": "主题表达",
+        "product": "产品展示",
+        "portrait": "人物氛围",
+        "story": "剧情片段",
+        "travel": "旅行/风景"
+      },
+      "styles": {
+        "cinematic": "电影感",
+        "premium": "高级质感",
+        "realistic": "写实自然",
+        "dreamy": "梦幻治愈",
+        "social": "短视频传播"
+      },
+      "cameras": {
+        "static": "固定机位",
+        "push": "推近镜头",
+        "tracking": "跟拍移动",
+        "orbit": "环绕展示",
+        "aerial": "航拍广角"
+      },
+      "paces": {
+        "gentle": "舒缓细腻",
+        "steady": "自然平衡",
+        "brisk": "明快利落"
+      },
+      "audios": {
+        "immersive": "沉浸环境声",
+        "narration": "突出人声/口播",
+        "ambience": "氛围音为主",
+        "silent": "按无声视频设计"
+      }
+    }
+  },
+  "actions": {
+    "generate": "开始创作",
+    "generating": "创作中...",
+    "clear": "清空表单"
+  },
+  "cost": {
+    "label": "本地任务",
+    "value": "{local}",
+    "estimated": "预估任务",
+    "local": "本地",
+    "insufficient": "个人版不限制使用，请检查模型和 API Key 配置"
+  },
+  "success": {
+    "title": "创作任务已提交！",
+    "templateApplied": "已应用提示词：{name}",
+    "message": "作品正在生成中，请前往任务列表查看进度",
+    "viewTasks": "查看任务"
+  },
+  "errors": {
+    "loadModels": "获取模型列表失败",
+    "noModels": "暂无可用模型",
+    "submit": "创作失败，请重试",
+    "selectModel": "请选择一个AI模型",
+    "promptRequired": "请输入创作描述",
+    "doubaoModesExclusive": "Seedance 2.0 的多模态参考输入与首尾帧输入只能二选一",
+    "doubaoAudioNeedsMedia": "参考音频不能单独使用，至少需要搭配 1 个参考图片或参考视频",
+    "doubaoReferenceImageLimit": "参考图片最多可上传 9 张",
+    "doubaoReferenceVideoLimit": "参考视频最多可上传 3 个",
+    "doubaoReferenceAudioLimit": "参考音频最多可上传 3 段",
+    "wanxReferenceRequired": "万相至少需要 1 个参考图片或参考视频",
+    "wanxReferenceVisualLimit": "万相的参考图片与参考视频总数最多为 5 个",
+    "wanxReferenceAudioLimit": "当前万相模型不支持参考音频，或参考音频数量超出限制",
+    "wanxAudioNeedsVisual": "万相参考音频不能超过参考图片与参考视频总数，且不能单独使用",
+    "wanxI2vRatioUnsupported": "视频续写/尾帧不支持比例参数",
+    "wanxI2vSingleFirstFrame": "当前组合最多 1 张首帧图",
+    "wanxI2vSingleLastFrame": "当前组合最多 1 张尾帧图",
+    "wanxI2vSingleVideo": "当前组合最多 1 个续写视频",
+    "wanxContinuationVideoRequired": "请先上传续写视频",
+    "wanxSingleAudioOnly": "当前组合最多 1 个音频",
+    "referenceLimitReached": "当前模型最多支持 {max} 个参考素材",
+    "referenceAssetsMutuallyExclusive": "已启用首尾帧输入时，不能再选择项目参考素材",
+    "promptTooShort": "提示词至少需要 1 个字符",
+    "promptTooLong": "提示词过长，请精简后重试"
+  },
+  "featuredTemplates": {
+    "quickStart": "快速开始",
+    "allTemplates": "全部提示词 →",
+    "savePreset": "保存为预设",
+    "savePresetTitle": "预设名称",
+    "savePresetPlaceholder": "给这个预设起个名字",
+    "savePresetSuccess": "预设已保存",
+    "savePresetFail": "保存预设失败",
+    "myPresets": "我的预设",
+    "applyTemplate": "做同款",
+    "presetSaved": "预设「{name}」已保存",
+    "loginRequired": "个人版预设保存在本地",
+    "categoryAll": "全部分类",
+    "dragHint": "左右拖动或点击箭头，查看更多创意。",
+    "loginToViewPresets": "本地预设会保存在当前浏览器，并在这里快速套用。",
+    "emptySystem": "暂无网络提示词",
+    "emptySystemDesc": "当前类型下还没有可用网络提示词，请先切换分类或直接自定义创作。",
+    "emptyPresets": "暂无个人预设",
+    "emptyPresetsDesc": "你保存过的图片或视频预设会显示在这里。",
+    "scrollPrev": "查看上一个创意",
+    "scrollNext": "查看下一个创意",
+    "sources": {
+      "system": "提示词来源：https://github.com/glidea/banana-prompt-quicker",
+      "presets": "我的预设"
+    }
+  }
+}

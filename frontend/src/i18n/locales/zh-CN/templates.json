@@ -1,0 +1,35 @@
+{
+  "title": "网络提示词",
+  "description": "收录网络灵感提示词，支持搜索、筛选并直接套用到创作页。",
+  "source": {
+    "network": "网络提示词",
+    "system": "网络提示词",
+    "presets": "我的预设"
+  },
+  "network": {
+    "searchPlaceholder": "搜索标题、内容或作者..."
+  },
+  "filters": {
+    "all": "全部",
+    "image": "图片",
+    "video": "视频"
+  },
+  "card": {
+    "use": "使用提示词"
+  },
+  "actions": {
+    "refresh": "刷新数据"
+  },
+  "empty": {
+    "title": "暂无提示词",
+    "description": "当前筛选条件下没有可用的网络提示词"
+  },
+  "presets": {
+    "title": "我的预设",
+    "empty": "暂无预设",
+    "emptyDesc": "在创作页将参数保存为预设后，在这里可以找到",
+    "delete": "删除预设",
+    "deleteConfirm": "确认删除此预设吗？",
+    "deleteSuccess": "预设已删除"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "title": "在线画板",
+  "description": "在站内直接画草图、加标注、整理构图。支持画笔、形状、文字、项目 JSON 导入导出，以及成品 PNG 下载。",
+  "hero": {
+    "badge": "画板工作区",
+    "meta": {
+      "draw": "自由绘制",
+      "shapes": "基础图形",
+      "project": "项目导入导出",
+      "png": "PNG 成图"
+    }
+  },
+  "panels": {
+    "modes": "编辑模式",
+    "insert": "插入内容",
+    "styles": "样式面板",
+    "files": "项目文件",
+    "projectImport": "导入项目",
+    "tips": "操作提示",
+    "board": "创作画布",
+    "status": "当前状态"
+  },
+  "tools": {
+    "select": "选择",
+    "brush": "画笔",
+    "eraser": "橡皮擦",
+    "rectangle": "矩形",
+    "circle": "圆形",
+    "line": "直线",
+    "text": "文字",
+    "image": "图片"
+  },
+  "style": {
+    "stroke": "主色",
+    "fill": "填充",
+    "brushSize": "笔刷大小",
+    "applyToSelection": "修改颜色或粗细时，会同步到当前选中的对象。"
+  },
+  "actions": {
+    "undo": "撤销",
+    "redo": "重做",
+    "delete": "删除选中",
+    "clear": "清空画板",
+    "importProject": "导入项目",
+    "exportProject": "导出项目",
+    "exportPng": "导出 PNG",
+    "addImage": "导入图片",
+    "saveToProject": "导入到项目"
+  },
+  "projectImport": {
+    "projectLabel": "选择项目",
+    "projectPlaceholder": "请选择一个项目",
+    "assetCount": "{count} 个素材",
+    "inspirationCount": "{count} 条灵感",
+    "promptCount": "{count} 条提示词",
+    "assetTitleLabel": "作品名称",
+    "assetTitlePlaceholder": "例如：品牌构图草稿、角色姿态草图、镜头布局初稿",
+    "helper": "会把当前画布导出的 PNG 直接作为图片素材写入项目素材库。",
+    "descriptionEmpty": "这个项目还没有描述，可以稍后去项目管理页补充。",
+    "coverImage": "封面图",
+    "coverVideo": "封面视频",
+    "loading": "正在加载项目列表...",
+    "empty": "还没有可用项目，先去项目页创建一个项目吧。",
+    "login": "画板成品可直接沉淀到本地项目里。",
+    "loginAction": "打开项目",
+    "manage": "前往项目管理"
+  },
+  "board": {
+    "title": "创作画布",
+    "subtitle": "在画布上自由绘制，也可以插入形状、图片和文字后拖动调整。",
+    "loading": "正在初始化画板...",
+    "hint": "双击文字可直接编辑；选中对象后可拖拽、缩放和旋转。",
+    "size": "画布尺寸 {width} × {height}"
+  },
+  "status": {
+    "tool": "当前工具",
+    "selection": "当前选中",
+    "objects": "对象数量",
+    "none": "未选中",
+    "multiSelection": "已选 {count} 个对象",
+    "objectTypes": {
+      "rectangle": "矩形",
+      "circle": "圆形",
+      "line": "直线",
+      "text": "文字",
+      "path": "路径",
+      "image": "图片",
+      "group": "组合",
+      "unknown": "对象"
+    }
+  },
+  "tips": {
+    "items": {
+      "delete": "按 Delete / Backspace 可以删除选中对象。",
+      "history": "按 Ctrl/Cmd + Z 撤销，Ctrl/Cmd + Shift + Z 或 Ctrl/Cmd + Y 重做。",
+      "project": "导出的项目文件为 JSON，可稍后重新导入继续编辑。",
+      "png": "导出的 PNG 会保留当前画布白底，适合直接交付或分享。"
+    }
+  },
+  "defaults": {
+    "text": "双击编辑文字"
+  },
+  "messages": {
+    "projectImported": "项目已导入",
+    "projectExported": "项目已导出",
+    "pngExported": "PNG 已开始下载",
+    "imageImported": "图片已放入画布",
+    "cleared": "画板已清空",
+    "selectionDeleted": "已删除选中对象",
+    "savedToProject": "作品已导入项目「{project}」"
+  },
+  "errors": {
+    "initFailed": "画板初始化失败，请刷新后重试",
+    "projectImportFailed": "项目导入失败，请确认文件格式正确",
+    "imageImportFailed": "图片导入失败，请更换文件后重试",
+    "nothingSelected": "请先选中一个对象",
+    "loadProjectsFailed": "项目列表加载失败，请稍后重试",
+    "projectRequired": "请先选择一个项目",
+    "loginRequired": "本地模式未初始化，请刷新页面",
+    "saveToProjectFailed": "导入项目失败，请稍后重试"
+  }
+}

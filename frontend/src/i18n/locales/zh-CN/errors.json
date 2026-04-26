@@ -1,0 +1,39 @@
+{
+  "auth": {
+    "unauthorized": "本地模式未初始化，请刷新页面",
+    "forbidden": "权限不足"
+  },
+  "tasks": {
+    "generateFailed": "生成失败，请重试",
+    "pollTimeout": "轮询超时，请手动刷新",
+    "deleteFailed": "删除失败",
+    "retryFailed": "重试失败"
+  },
+  "network": {
+    "timeout": "请求超时，请检查网络连接",
+    "serverError": "服务器错误，请稍后重试",
+    "notFound": "请求的资源不存在",
+    "badRequest": "请求参数错误",
+    "unknownError": "未知错误，请稍后重试"
+  },
+  "notFound": {
+    "title": "页面不存在",
+    "description": "当前地址没有对应的本地页面。",
+    "backHome": "返回首页"
+  },
+  "boundary": {
+    "title": "出错了",
+    "description": "应用程序遇到了一个错误。请稍后重试。",
+    "retry": "重试",
+    "home": "返回首页",
+    "debugId": "错误 ID: {id}"
+  },
+  "validation": {
+    "required": "此字段为必填项",
+    "invalidFormat": "格式不正确",
+    "tooLong": "内容过长",
+    "tooShort": "内容过短",
+    "fileTooLarge": "文件过大，最大{size}MB",
+    "invalidFileType": "文件类型不支持"
+  }
+}

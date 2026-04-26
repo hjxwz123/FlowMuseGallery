@@ -1,0 +1,35 @@
+{
+  "title": "Community Prompts",
+  "description": "Browse web prompts, filter them quickly, and apply them directly in the create page.",
+  "source": {
+    "network": "Community Prompts",
+    "system": "Network Prompts",
+    "presets": "My Presets"
+  },
+  "network": {
+    "searchPlaceholder": "Search by title, content or author..."
+  },
+  "filters": {
+    "all": "All",
+    "image": "Image",
+    "video": "Video"
+  },
+  "card": {
+    "use": "Use Prompt"
+  },
+  "actions": {
+    "refresh": "Refresh data"
+  },
+  "empty": {
+    "title": "No Prompts",
+    "description": "No community prompts match the current filters"
+  },
+  "presets": {
+    "title": "My Presets",
+    "empty": "No Presets",
+    "emptyDesc": "Save your parameters as a preset in the create page to find them here",
+    "delete": "Delete Preset",
+    "deleteConfirm": "Are you sure you want to delete this preset?",
+    "deleteSuccess": "Preset deleted"
+  }
+}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#00178a" />
+    <meta
+      name="description"
+      content="FlowMuse 提供图像生成、视频生成与 AI 对话的一体化个人创作体验。"
+    />
+    <title>FlowMuse</title>
+    <script>
+      ;(function () {
+        try {
+          var d = document.documentElement
+          var h = document.head || document.getElementsByTagName('head')[0]
+          d.classList.remove('light', 'dark')
+          var s = JSON.parse(localStorage.getItem('theme-storage') || '{}')
+          var t = (s.state && s.state.theme) || 'system'
+          if (t === 'system') {
+            t = window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'
+          }
+          d.classList.add(t)
+          d.style.colorScheme = t
+          var m = document.querySelector('meta[name="darkreader-lock"]')
+          if (t === 'dark') {
+            if (!m && h) {
+              m = document.createElement('meta')
+              m.name = 'darkreader-lock'
+              h.appendChild(m)
+            }
+          } else if (m) {
+            m.remove()
+          }
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+# dependencies
+node_modules
+frontend/node_modules
+
+# builds
+dist
+build
+frontend/.next
+frontend/out
+frontend/build
+*.tsbuildinfo
+
+# uploads / runtime
+uploads
+tmp
+logs
+*.log
+
+# environment files
+.env
+.env.*
+!.env.example
+!.env.docker.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# OS / editor
+.DS_Store
+.vscode
+.idea
+*.pem
+
+# local database
+prisma/data/
+*.sqlite
+*.sqlite-journal
+
+# temporary archives / local artifacts
+*.zip
+login_result*.html
+j.json
+
+# personal notes
+personal.md

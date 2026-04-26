@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "provider": "nanobanana",
+    "displayName": "NanoBanana",
+    "adapterClass": "NanobananaImageAdapter",
+    "icon": null,
+    "supportTypes": ["image"],
+    "defaultParams": null,
+    "paramSchema": null,
+    "webhookRequired": false,
+    "isActive": true,
+    "sortOrder": 100
+  },
+  {
+    "id": 2,
+    "provider": "mj",
+    "displayName": "midjourney",
+    "adapterClass": "MidjourneyImageAdapter",
+    "icon": null,
+    "supportTypes": ["image"],
+    "defaultParams": null,
+    "paramSchema": null,
+    "webhookRequired": false,
+    "isActive": true,
+    "sortOrder": 100
+  },
+  {
+    "id": 3,
+    "provider": "gptimage",
+    "displayName": "GPT- IMAGE",
+    "adapterClass": "GptImageAdapter",
+    "icon": null,
+    "supportTypes": ["image"],
+    "defaultParams": null,
+    "paramSchema": null,
+    "webhookRequired": false,
+    "isActive": true,
+    "sortOrder": 100
+  },
+  {
+    "id": 4,
+    "provider": "doubao",
+    "displayName": "火山豆包",
+    "adapterClass": "DoubaoImageAdapter",
+    "icon": null,
+    "supportTypes": ["image", "video"],
+    "defaultParams": null,
+    "paramSchema": null,
+    "webhookRequired": false,
+    "isActive": true,
+    "sortOrder": 100
+  },
+  {
+    "id": 11,
+    "provider": "qwen",
+    "displayName": "通义千问",
+    "adapterClass": "QianwenImageAdapter",
+    "icon": null,
+    "supportTypes": ["image"],
+    "defaultParams": null,
+    "paramSchema": null,
+    "webhookRequired": false,
+    "isActive": true,
+    "sortOrder": 100
+  },
+  {
+    "id": 12,
+    "provider": "wanx",
+    "displayName": "通义万相",
+    "adapterClass": "WanxVideoAdapter",
+    "icon": null,
+    "supportTypes": ["video"],
+    "defaultParams": null,
+    "paramSchema": null,
+    "webhookRequired": false,
+    "isActive": true,
+    "sortOrder": 100
+  }
+]

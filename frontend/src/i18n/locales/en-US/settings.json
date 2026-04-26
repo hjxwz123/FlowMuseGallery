@@ -1,0 +1,124 @@
+{
+  "common": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "confirmDelete": "Confirm Delete",
+    "create": "Create",
+    "delete": "Delete",
+    "deleteFailed": "Delete failed",
+    "deleting": "Deleting...",
+    "disabled": "Disabled",
+    "edit": "Edit",
+    "enabled": "Enabled",
+    "failedToLoad": "Failed to load",
+    "failedToSave": "Failed to save",
+    "loading": "Loading...",
+    "noData": "No data",
+    "save": "Save",
+    "saved": "Saved",
+    "saving": "Saving..."
+  },
+  "system": {
+    "title": "System Settings",
+    "tabs": {
+      "chat": "Chat Models",
+      "media": "Images/Videos"
+    },
+    "apiBaseUrl": "API Base URL",
+    "apiKey": "API Key",
+    "promptOptimizeModel": "Prompt Optimization Model",
+    "storage": {
+      "title": "Tencent Cloud COS",
+      "secretId": "SecretId",
+      "secretKey": "SecretKey",
+      "bucket": "Bucket",
+      "region": "Region",
+      "publicBaseUrl": "Public Base URL",
+      "prefix": "Path Prefix"
+    }
+  },
+  "media": {
+    "channels": {
+      "fields": {
+        "name": "Channel Name",
+        "provider": "Provider",
+        "baseUrl": "Base URL",
+        "status": "Status"
+      },
+      "testConnection": "Test Connection",
+      "connectionOk": "Connection OK",
+      "connectionFailed": "Connection failed"
+    }
+  },
+  "channelModal": {
+    "edit": "Configure Channel",
+    "fields": {
+      "baseUrl": "Base URL",
+      "apiKey": "API Key"
+    },
+    "placeholders": {
+      "baseUrl": "https://api.example.com",
+      "apiKeyCreate": "Enter API Key",
+      "apiKeyEdit": "Leave blank to keep current API Key"
+    },
+    "apiKeyKeep": "(leave blank to keep current)",
+    "errors": {
+      "channelRequired": "Select a channel",
+      "baseUrlRequired": "Enter Base URL",
+      "apiKeyRequired": "Enter API Key",
+      "updateFailed": "Update failed. Please try again."
+    }
+  },
+  "chatModels": {
+    "title": "Chat Model Settings",
+    "refresh": "Refresh",
+    "add": "Add Chat Model",
+    "empty": "No chat models",
+    "configure": "Configure",
+    "deleteConfirm": "Delete chat model \"{name}\"?",
+    "dragAria": "Drag sort {name}",
+    "modal": {
+      "add": "Add Chat Model",
+      "edit": "Configure Chat Model"
+    },
+    "fields": {
+      "name": "Display Name",
+      "modelKey": "Request Model Name",
+      "icon": "Icon",
+      "description": "Model Description",
+      "systemPrompt": "System Message",
+      "maxContextRounds": "Context Rounds",
+      "sortOrder": "Sort"
+    },
+    "placeholders": {
+      "icon": "https://example.com/icon.png or data:image/..."
+    },
+    "uploadImage": "Upload Image",
+    "supportsVision": "Vision Enabled",
+    "noVision": "Vision Disabled",
+    "saveConfig": "Save",
+    "createModel": "Create Model",
+    "errors": {
+      "loadFailed": "Failed to load chat model settings",
+      "nameRequired": "Enter display name",
+      "modelKeyRequired": "Enter request model name",
+      "apiRequired": "Complete API settings first",
+      "positiveInteger": "{label} must be a positive integer",
+      "sortOrderInvalid": "Sort must be a non-negative integer",
+      "imageFileRequired": "Select an image file",
+      "imageTooLarge": "Image file must be 1MB or smaller",
+      "readImageFailed": "Failed to read image",
+      "createFailed": "Failed to add chat model",
+      "updateFailed": "Failed to update chat model",
+      "deleteFailed": "Failed to delete chat model",
+      "saveOrderFailed": "Failed to save chat model order"
+    },
+    "toasts": {
+      "created": "Chat model added",
+      "updated": "Chat model updated",
+      "deleted": "Chat model deleted",
+      "orderUpdated": "Chat model order updated"
+    }
+  }
+}

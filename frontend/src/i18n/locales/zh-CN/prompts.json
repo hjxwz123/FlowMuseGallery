@@ -1,0 +1,56 @@
+{
+  "title": "提示词推荐",
+  "subtitle": "探索创意提示词，激发无限灵感",
+  "searchPlaceholder": "搜索提示词...",
+  "refresh": "刷新数据",
+  "tabs": {
+    "all": "全部",
+    "generate": "生成",
+    "edit": "编辑"
+  },
+  "category": {
+    "all": "全部分类",
+    "有趣": "有趣",
+    "实用": "实用",
+    "艺术": "艺术",
+    "风格": "风格",
+    "其他": "其他"
+  },
+  "card": {
+    "author": "作者",
+    "mode": {
+      "generate": "生成",
+      "edit": "编辑"
+    },
+    "viewDetail": "查看详情",
+    "copyPrompt": "复制提示词",
+    "visitLink": "访问链接"
+  },
+  "modal": {
+    "title": "提示词详情",
+    "prompt": "提示词",
+    "category": "分类",
+    "subCategory": "子分类",
+    "mode": {
+      "generate": "生成",
+      "edit": "编辑"
+    },
+    "author": "作者",
+    "link": "原始链接",
+    "created": "创建时间",
+    "close": "关闭",
+    "copyPrompt": "复制提示词",
+    "copied": "已复制",
+    "visitLink": "访问原文"
+  },
+  "empty": {
+    "title": "暂无提示词",
+    "description": "当前分类下还没有提示词"
+  },
+  "loading": "加载中...",
+  "loadMore": "加载更多",
+  "noMore": "已加载全部提示词",
+  "error": {
+    "load": "加载失败，请重试"
+  }
+}

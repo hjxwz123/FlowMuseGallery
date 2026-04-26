@@ -1,0 +1,43 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "declaration": false
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*.spec.ts"
+  ],
+  "include": [
+    "prisma/seed.ts",
+    "src/main.ts",
+    "src/app.module.ts",
+    "src/app.controller.ts",
+    "src/adapters/**/*.ts",
+    "src/admin/admin.module.ts",
+    "src/admin/ai-settings/**/*.ts",
+    "src/admin/channels/**/*.ts",
+    "src/admin/configs/**/*.ts",
+    "src/admin/models/**/*.ts",
+    "src/admin/providers/**/*.ts",
+    "src/admin/site-settings/**/*.ts",
+    "src/chat/**/*.ts",
+    "src/common/**/*.ts",
+    "src/encryption/**/*.ts",
+    "src/images/**/*.ts",
+    "src/local-runner/**/*.ts",
+    "src/models/**/*.ts",
+    "src/prisma/**/*.ts",
+    "src/projects/**/*.ts",
+    "src/prompt-optimize/**/*.ts",
+    "src/providers/**/*.ts",
+    "src/settings/**/*.ts",
+    "src/site/**/*.ts",
+    "src/storage/**/*.ts",
+    "src/tasks/**/*.ts",
+    "src/types/**/*.ts",
+    "src/videos/**/*.ts"
+  ]
+}

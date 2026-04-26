@@ -1,0 +1,47 @@
+# FlowMuse Personal local deployment.
+#
+# Quick start:
+#   docker compose up -d --build
+#
+# Persistent data is stored under ./data:
+#   ./data/sqlite   SQLite database
+#   ./data/uploads  generated images, videos and uploaded files
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: flowmuse-personal-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-file:./data/flowmuse.sqlite}
+      PORT: 3000
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:-http://localhost:3000}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3001}
+      APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:-change-me-32-bytes-minimum-length}
+    command: >
+      sh -c "mkdir -p /app/prisma/data /app/uploads && ./node_modules/.bin/prisma migrate deploy && node dist/src/main.js"
+    ports:
+      - "${BACKEND_PORT:-3000}:3000"
+    volumes:
+      - ./data/sqlite:/app/prisma/data
+      - ./data/uploads:/app/uploads
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        BACKEND_URL: http://backend:3000
+        VITE_API_BASE_URL: /api
+    container_name: flowmuse-personal-frontend
+    restart: unless-stopped
+    environment:
+      PORT: 3001
+      BACKEND_URL: http://backend:3000
+    depends_on:
+      backend:
+        condition: service_started
+    ports:
+      - "${FRONTEND_PORT:-3001}:3001"

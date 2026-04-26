@@ -1,0 +1,122 @@
+{
+  "title": "Online Canvas",
+  "description": "Sketch, annotate, and refine compositions right inside the site. Includes free drawing, shapes, text, JSON project import/export, and PNG output.",
+  "hero": {
+    "badge": "Canvas Workspace",
+    "meta": {
+      "draw": "Free Drawing",
+      "shapes": "Basic Shapes",
+      "project": "Project Import/Export",
+      "png": "PNG Output"
+    }
+  },
+  "panels": {
+    "modes": "Editing Modes",
+    "insert": "Insert Content",
+    "styles": "Style Panel",
+    "files": "Project Files",
+    "projectImport": "Save to Project",
+    "tips": "Tips",
+    "board": "Canvas",
+    "status": "Current Status"
+  },
+  "tools": {
+    "select": "Select",
+    "brush": "Brush",
+    "eraser": "Eraser",
+    "rectangle": "Rectangle",
+    "circle": "Circle",
+    "line": "Line",
+    "text": "Text",
+    "image": "Image"
+  },
+  "style": {
+    "stroke": "Primary",
+    "fill": "Fill",
+    "brushSize": "Brush Size",
+    "applyToSelection": "Changing color or stroke width also updates the currently selected object."
+  },
+  "actions": {
+    "undo": "Undo",
+    "redo": "Redo",
+    "delete": "Delete Selected",
+    "clear": "Clear Canvas",
+    "importProject": "Import Project",
+    "exportProject": "Export Project",
+    "exportPng": "Export PNG",
+    "addImage": "Import Image",
+    "saveToProject": "Save to Project"
+  },
+  "projectImport": {
+    "projectLabel": "Choose Project",
+    "projectPlaceholder": "Select a project",
+    "assetCount": "{count} assets",
+    "inspirationCount": "{count} inspiration item(s)",
+    "promptCount": "{count} prompt(s)",
+    "assetTitleLabel": "Artwork Title",
+    "assetTitlePlaceholder": "For example: composition draft, character pose sketch, scene layout v1",
+    "helper": "The current canvas will be exported as PNG and saved directly into the selected project's asset library.",
+    "descriptionEmpty": "This project does not have a description yet. You can add one later from the project page.",
+    "coverImage": "Cover image",
+    "coverVideo": "Cover video",
+    "loading": "Loading projects...",
+    "empty": "No projects yet. Create one first from the Projects page.",
+    "login": "Canvas output can be saved directly into a local project.",
+    "loginAction": "Open Projects",
+    "manage": "Open Projects"
+  },
+  "board": {
+    "title": "Creative Canvas",
+    "subtitle": "Draw freely on the board or insert shapes, images, and text, then reposition and resize them.",
+    "loading": "Initializing canvas...",
+    "hint": "Double click text to edit it. Selected objects can be moved, scaled, and rotated.",
+    "size": "Canvas Size {width} x {height}"
+  },
+  "status": {
+    "tool": "Active Tool",
+    "selection": "Selection",
+    "objects": "Objects",
+    "none": "Nothing selected",
+    "multiSelection": "{count} objects selected",
+    "objectTypes": {
+      "rectangle": "Rectangle",
+      "circle": "Circle",
+      "line": "Line",
+      "text": "Text",
+      "path": "Path",
+      "image": "Image",
+      "group": "Group",
+      "unknown": "Object"
+    }
+  },
+  "tips": {
+    "items": {
+      "delete": "Press Delete or Backspace to remove selected objects.",
+      "history": "Use Ctrl/Cmd + Z for undo, and Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y for redo.",
+      "project": "Exported project files are JSON and can be imported later to continue editing.",
+      "png": "PNG export keeps the current white canvas background for quick delivery or sharing."
+    }
+  },
+  "defaults": {
+    "text": "Double click to edit"
+  },
+  "messages": {
+    "projectImported": "Project imported",
+    "projectExported": "Project exported",
+    "pngExported": "PNG download started",
+    "imageImported": "Image added to the canvas",
+    "cleared": "Canvas cleared",
+    "selectionDeleted": "Selection removed",
+    "savedToProject": "Artwork saved to project \"{project}\""
+  },
+  "errors": {
+    "initFailed": "Canvas failed to initialize. Please refresh and try again.",
+    "projectImportFailed": "Project import failed. Please check the file format.",
+    "imageImportFailed": "Image import failed. Please try another file.",
+    "nothingSelected": "Select at least one object first.",
+    "loadProjectsFailed": "Failed to load projects. Please try again later.",
+    "projectRequired": "Please choose a project first.",
+    "loginRequired": "Local mode is not initialized. Refresh the page.",
+    "saveToProjectFailed": "Failed to save into project. Please try again later."
+  }
+}

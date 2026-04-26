@@ -1,0 +1,61 @@
+{
+  "brand": "FlowMuse",
+  "menu": {
+    "home": "首页",
+    "gallery": "画廊",
+    "create": "创作",
+    "creationCenter": "创作中心",
+    "projects": "项目",
+    "chat": "对话",
+    "workflow": "工作流",
+    "studio": "创作台",
+    "tasks": "任务",
+    "templates": "网络提示词",
+    "layoutTop": "顶部菜单",
+    "layoutSide": "侧边菜单",
+    "layoutSwitchToTop": "切换为顶部菜单",
+    "layoutSwitchToSide": "切换为侧边菜单",
+    "sidebarCollapse": "折叠侧边栏",
+    "sidebarExpand": "展开侧边栏",
+    "sidebarLocked": "对话页面固定折叠",
+    "rail": {
+      "inspiration": "灵感",
+      "generate": "生成",
+      "assets": "资产",
+      "canvas": "画布",
+      "api": "API"
+    },
+    "creationMenu": {
+      "badge": "创作导航",
+      "quickMode": "快速模式",
+      "workflowMode": "工作流模式",
+      "workflow": "工作流",
+      "workflowDesc": "通过对话和智能编排推进完整创作流程",
+      "studio": "创作台",
+      "studioDesc": "进入自由参数面板，直接开始图像与视频创作",
+      "workspace": "创作工作台",
+      "workspaceDesc": "文生图、图生图、文生视频统一入口",
+      "tasks": "任务管理",
+      "tasksDesc": "查看任务进度、状态与历史记录",
+      "inspiration": "我的作品",
+      "inspirationDesc": "查看本地生成的图片和视频作品",
+      "templates": "网络提示词",
+      "templatesDesc": "查看网络提示词并一键套用"
+    }
+  },
+  "user": {
+    "profile": "本地用户"
+  },
+  "language": {
+    "title": "选择语言",
+    "current": "中文",
+    "switch": "Switch to English",
+    "languages": {
+      "zh-CN": "中文",
+      "en-US": "English"
+    }
+  },
+  "footer": {
+    "copyright": "© 2026 FlowMuse"
+  }
+}

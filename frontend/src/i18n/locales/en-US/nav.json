@@ -1,0 +1,61 @@
+{
+  "brand": "FlowMuse",
+  "menu": {
+    "home": "Home",
+    "gallery": "Gallery",
+    "create": "Create",
+    "creationCenter": "Creative Hub",
+    "projects": "Projects",
+    "chat": "Chat",
+    "workflow": "Workflow",
+    "studio": "Studio",
+    "tasks": "Tasks",
+    "templates": "Network Prompts",
+    "layoutTop": "Top menu",
+    "layoutSide": "Side menu",
+    "layoutSwitchToTop": "Switch to top menu",
+    "layoutSwitchToSide": "Switch to side menu",
+    "sidebarCollapse": "Collapse sidebar",
+    "sidebarExpand": "Expand sidebar",
+    "sidebarLocked": "Sidebar is locked on Chat",
+    "rail": {
+      "inspiration": "Explore",
+      "generate": "Create",
+      "assets": "Assets",
+      "canvas": "Canvas",
+      "api": "API"
+    },
+    "creationMenu": {
+      "badge": "Creation Hub",
+      "quickMode": "Quick Mode",
+      "workflowMode": "Workflow Mode",
+      "workflow": "Workflow",
+      "workflowDesc": "Use conversations and orchestration to drive the full creative flow",
+      "studio": "Studio",
+      "studioDesc": "Open the direct control workspace for image and video creation",
+      "workspace": "Create Studio",
+      "workspaceDesc": "Unified entry for text/image/video generation",
+      "tasks": "Task Center",
+      "tasksDesc": "Track progress, status, and task history",
+      "inspiration": "My Works",
+      "inspirationDesc": "View locally generated image and video works",
+      "templates": "Network Prompts",
+      "templatesDesc": "Browse network prompts and apply them in one click"
+    }
+  },
+  "user": {
+    "profile": "Local User"
+  },
+  "language": {
+    "title": "Select Language",
+    "current": "English",
+    "switch": "切换到中文",
+    "languages": {
+      "zh-CN": "中文",
+      "en-US": "English"
+    }
+  },
+  "footer": {
+    "copyright": "© 2026 FlowMuse"
+  }
+}

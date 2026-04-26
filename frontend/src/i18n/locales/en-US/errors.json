@@ -1,0 +1,39 @@
+{
+  "auth": {
+    "unauthorized": "Local mode is not initialized. Refresh the page.",
+    "forbidden": "Access denied"
+  },
+  "tasks": {
+    "generateFailed": "Generation failed, please try again",
+    "pollTimeout": "Polling timeout, please refresh manually",
+    "deleteFailed": "Delete failed",
+    "retryFailed": "Retry failed"
+  },
+  "network": {
+    "timeout": "Request timeout, please check your network connection",
+    "serverError": "Server error, please try again later",
+    "notFound": "Resource not found",
+    "badRequest": "Invalid request parameters",
+    "unknownError": "Unknown error, please try again later"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "There is no local page for this address.",
+    "backHome": "Back home"
+  },
+  "boundary": {
+    "title": "Something went wrong",
+    "description": "The application encountered an error. Please try again in a moment.",
+    "retry": "Retry",
+    "home": "Back to Home",
+    "debugId": "Error ID: {id}"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidFormat": "Invalid format",
+    "tooLong": "Content is too long",
+    "tooShort": "Content is too short",
+    "fileTooLarge": "File is too large, max {size}MB",
+    "invalidFileType": "File type not supported"
+  }
+}

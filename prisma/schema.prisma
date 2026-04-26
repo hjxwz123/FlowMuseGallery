@@ -1,0 +1,380 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               BigInt    @id @default(autoincrement())
+  email            String    @unique
+  username         String?
+  avatar           String?
+  role             String    @default("user")
+  status           String    @default("active")
+  banReason        String?   @map("ban_reason")
+  banExpireAt      DateTime? @map("ban_expire_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  imageTasks          ImageTask[]
+  videoTasks          VideoTask[]
+  projects            Project[]
+  projectAssets       ProjectAsset[]
+  projectInspirations ProjectInspiration[]
+  projectPrompts      ProjectPrompt[]
+  chatConversations   ChatConversation[]
+  chatMessages        ChatMessage[]
+  chatFiles           ChatFile[]
+
+  @@index([createdAt], name: "users_created_at_idx")
+  @@map("users")
+}
+
+model ApiChannel {
+  id           BigInt   @id @default(autoincrement())
+  name         String
+  provider     String
+  baseUrl      String   @map("base_url")
+  apiKey       String?  @map("api_key")
+  apiSecret    String?  @map("api_secret")
+  extraHeaders String?  @map("extra_headers")
+  timeout      Int      @default(300000)
+  maxRetry     Int      @default(3) @map("max_retry")
+  rateLimit    Int?     @map("rate_limit")
+  status       String   @default("active")
+  priority     Int      @default(0)
+  description  String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  models        AiModel[]
+  imageTasks    ImageTask[]
+  videoTasks    VideoTask[]
+  @@index([provider, status, priority], name: "api_channel_idx_provider_status")
+  @@map("api_channels")
+}
+
+model AiModel {
+  id                      BigInt   @id @default(autoincrement())
+  name                    String
+  modelKey                String   @map("model_key")
+  icon                    String?
+  type                    String
+  provider                String
+  channelId               BigInt   @map("channel_id")
+  defaultParams           String?  @map("default_params")
+  paramConstraints        String?  @map("param_constraints")
+  isActive                Boolean  @default(true) @map("is_active")
+  sortOrder               Int      @default(0) @map("sort_order")
+  description             String?
+  supportsImageInput      Boolean? @map("supports_image_input")
+  supportsResolutionSelect Boolean? @map("supports_resolution_select")
+  supportsSizeSelect      Boolean? @map("supports_size_select")
+  supportsQuickMode       Boolean? @map("supports_quick_mode")
+  supportsAgentMode       Boolean? @map("supports_agent_mode")
+  supportsAutoMode        Boolean? @map("supports_auto_mode")
+  maxContextRounds        Int?     @map("max_context_rounds")
+  systemPrompt            String?  @map("system_prompt")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  channel             ApiChannel           @relation(fields: [channelId], references: [id])
+  imageTasks          ImageTask[]
+  videoTasks          VideoTask[]
+  chatConversations   ChatConversation[]
+
+  @@index([type, isActive, sortOrder], name: "ai_model_idx_type_active")
+  @@index([type, provider, isActive, sortOrder], name: "ai_model_idx_type_provider_active")
+  @@index([provider], name: "ai_model_idx_provider")
+  @@map("ai_models")
+}
+
+model ModelProvider {
+  id              BigInt   @id @default(autoincrement())
+  provider        String   @unique
+  displayName     String   @map("display_name")
+  adapterClass    String   @map("adapter_class")
+  icon            String?
+  supportTypes    String   @map("support_types")
+  defaultParams   String?  @map("default_params")
+  paramSchema     String?  @map("param_schema")
+  webhookRequired Boolean  @default(false) @map("webhook_required")
+  isActive        Boolean  @default(true) @map("is_active")
+  sortOrder       Int      @default(0) @map("sort_order")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive, sortOrder], name: "model_provider_idx_active")
+  @@map("model_providers")
+}
+
+model ImageTask {
+  id                   BigInt    @id @default(autoincrement())
+  userId               BigInt    @map("user_id")
+  modelId              BigInt    @map("model_id")
+  channelId            BigInt    @map("channel_id")
+  projectId            BigInt?   @map("project_id")
+  taskNo               String    @unique @map("task_no")
+  provider             String
+  providerTaskId       String?   @map("provider_task_id")
+  prompt               String
+  negativePrompt       String?   @map("negative_prompt")
+  parameters           String?
+  providerData         String?   @map("provider_data")
+  status               String
+  resultUrl            String?   @map("result_url")
+  thumbnailUrl         String?   @map("thumbnail_url")
+  storageKey           String?   @map("storage_key")
+  errorMessage         String?   @map("error_message")
+  retryCount           Int       @default(0) @map("retry_count")
+  startedAt            DateTime? @map("started_at")
+  completedAt          DateTime? @map("completed_at")
+  deletedAt            DateTime? @map("deleted_at")
+  createdAt            DateTime  @default(now()) @map("created_at")
+
+  user          User          @relation(fields: [userId], references: [id])
+  model         AiModel       @relation(fields: [modelId], references: [id])
+  channel       ApiChannel    @relation(fields: [channelId], references: [id])
+  project       Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  projectAssets ProjectAsset[]
+
+  @@index([userId, createdAt], name: "image_task_idx_user_time")
+  @@index([userId, deletedAt, createdAt], name: "image_task_idx_user_deleted_created")
+  @@index([provider, providerTaskId], name: "image_task_idx_provider_task")
+  @@index([projectId, createdAt], name: "image_task_idx_project_time")
+  @@index([status, createdAt], name: "image_task_idx_status")
+  @@index([userId, status, createdAt], name: "image_task_idx_user_status_created")
+  @@index([userId, status, deletedAt, completedAt], name: "image_task_idx_user_status_deleted_completed")
+  @@index([channelId, status, completedAt], name: "image_task_idx_channel_status_completed")
+  @@index([status, completedAt], name: "image_task_idx_status_completed")
+  @@map("image_tasks")
+}
+
+model VideoTask {
+  id                          BigInt    @id @default(autoincrement())
+  userId                      BigInt    @map("user_id")
+  modelId                     BigInt    @map("model_id")
+  channelId                   BigInt    @map("channel_id")
+  projectId                   BigInt?   @map("project_id")
+  taskNo                      String    @unique @map("task_no")
+  provider                    String
+  providerTaskId              String?   @map("provider_task_id")
+  prompt                      String
+  parameters                  String?
+  providerData                String?   @map("provider_data")
+  autoProjectShotId           String?   @map("auto_project_shot_id")
+  autoProjectWorkflowStage    String?   @map("auto_project_workflow_stage")
+  autoProjectFinalStoryboard  Boolean?  @map("auto_project_final_storyboard")
+  status                      String
+  resultUrl                   String?   @map("result_url")
+  thumbnailUrl                String?   @map("thumbnail_url")
+  storageKey                  String?   @map("storage_key")
+  errorMessage                String?   @map("error_message")
+  retryCount                  Int       @default(0) @map("retry_count")
+  startedAt                   DateTime? @map("started_at")
+  completedAt                 DateTime? @map("completed_at")
+  createdAt                   DateTime  @default(now()) @map("created_at")
+
+  user          User          @relation(fields: [userId], references: [id])
+  model         AiModel       @relation(fields: [modelId], references: [id])
+  channel       ApiChannel    @relation(fields: [channelId], references: [id])
+  project       Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  projectAssets ProjectAsset[]
+
+  @@index([userId, createdAt], name: "video_task_idx_user_time")
+  @@index([provider, providerTaskId], name: "video_task_idx_provider_task")
+  @@index([projectId, createdAt], name: "video_task_idx_project_time")
+  @@index([projectId, autoProjectFinalStoryboard, autoProjectShotId, createdAt], name: "video_task_idx_project_storyboard_lookup")
+  @@index([projectId, autoProjectWorkflowStage, createdAt], name: "video_task_idx_project_auto_stage_time")
+  @@index([status, createdAt], name: "video_task_idx_status")
+  @@index([userId, status, createdAt], name: "video_task_idx_user_status_created")
+  @@index([userId, status, completedAt, createdAt], name: "video_task_idx_user_status_completed_created")
+  @@index([channelId, status, completedAt], name: "video_task_idx_channel_status_completed")
+  @@index([status, completedAt], name: "video_task_idx_status_completed")
+  @@map("video_tasks")
+}
+
+model Project {
+  id          BigInt   @id @default(autoincrement())
+  userId      BigInt   @map("user_id")
+  name        String
+  concept     String?
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user                     User                 @relation(fields: [userId], references: [id])
+  assets                   ProjectAsset[]
+  inspirations             ProjectInspiration[]
+  prompts                  ProjectPrompt[]
+  chatContextConversations ChatConversation[]
+  imageTasks               ImageTask[]
+  videoTasks               VideoTask[]
+
+  @@index([userId, updatedAt], name: "project_idx_user_time")
+  @@map("projects")
+}
+
+model ProjectAsset {
+  id           BigInt   @id @default(autoincrement())
+  userId       BigInt   @map("user_id")
+  projectId    BigInt   @map("project_id")
+  kind         String
+  source       String
+  title        String
+  description  String?
+  sourcePrompt String?  @map("source_prompt")
+  fileName     String?  @map("file_name")
+  mimeType     String?  @map("mime_type")
+  fileSize     Int?     @map("file_size")
+  url          String
+  thumbnailUrl String?  @map("thumbnail_url")
+  storageKey   String?  @map("storage_key")
+  imageTaskId  BigInt?  @map("image_task_id")
+  videoTaskId  BigInt?  @map("video_task_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user      User       @relation(fields: [userId], references: [id])
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  imageTask ImageTask? @relation(fields: [imageTaskId], references: [id], onDelete: SetNull)
+  videoTask VideoTask? @relation(fields: [videoTaskId], references: [id], onDelete: SetNull)
+  parsedFile ChatFile?
+
+  @@unique([projectId, imageTaskId], name: "project_asset_project_image_task_unique")
+  @@unique([projectId, videoTaskId], name: "project_asset_project_video_task_unique")
+  @@index([projectId, createdAt], name: "project_asset_idx_project_time")
+  @@index([projectId, kind, createdAt], name: "project_asset_idx_project_kind_time")
+  @@index([userId, createdAt], name: "project_asset_idx_user_time")
+  @@index([userId, kind, createdAt], name: "project_asset_idx_user_kind_time")
+  @@map("project_assets")
+}
+
+model ProjectInspiration {
+  id              BigInt   @id @default(autoincrement())
+  userId          BigInt   @map("user_id")
+  projectId       BigInt   @map("project_id")
+  title           String
+  episodeNumber   Int?     @map("episode_number")
+  ideaText        String   @map("idea_text")
+  contextText     String?  @map("context_text")
+  plotText        String?  @map("plot_text")
+  generatedPrompt String?  @map("generated_prompt")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt], name: "project_inspiration_idx_project_time")
+  @@index([userId, createdAt], name: "project_inspiration_idx_user_time")
+  @@index([projectId, episodeNumber], name: "project_inspiration_idx_project_episode")
+  @@map("project_inspirations")
+}
+
+model ProjectPrompt {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt   @map("user_id")
+  projectId BigInt   @map("project_id")
+  type      String
+  title     String
+  prompt    String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt], name: "project_prompt_idx_project_time")
+  @@index([userId, createdAt], name: "project_prompt_idx_user_time")
+  @@index([projectId, type], name: "project_prompt_idx_project_type")
+  @@map("project_prompts")
+}
+
+model SystemConfig {
+  id          BigInt   @id @default(autoincrement())
+  key         String   @unique
+  value       String?
+  description String?
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("system_configs")
+}
+
+model ChatConversation {
+  id               BigInt   @id @default(autoincrement())
+  userId           BigInt   @map("user_id")
+  modelId          BigInt   @map("model_id")
+  projectContextId BigInt?  @map("project_context_id")
+  title            String
+  isPinned         Boolean  @default(false) @map("is_pinned")
+  composerMode     String?  @map("composer_mode")
+  lastMessageAt    DateTime @map("last_message_at")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  model          AiModel            @relation(fields: [modelId], references: [id])
+  projectContext Project?           @relation(fields: [projectContextId], references: [id], onDelete: SetNull)
+  messages       ChatMessage[]
+  files          ChatFile[]
+
+  @@index([userId, updatedAt], name: "chat_conv_idx_user_updated")
+  @@index([userId, lastMessageAt], name: "chat_conv_idx_user_last_message")
+  @@index([userId, isPinned, updatedAt], name: "chat_conv_idx_user_pin_updated")
+  @@index([modelId], name: "chat_conv_idx_model")
+  @@index([projectContextId], name: "chat_conv_idx_project_context")
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id             BigInt   @id @default(autoincrement())
+  conversationId BigInt   @map("conversation_id")
+  userId         BigInt   @map("user_id")
+  role           String
+  content        String
+  images         String?
+  files          String?
+  providerData   String?  @map("provider_data")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt], name: "chat_msg_idx_conv_time")
+  @@index([conversationId, role, createdAt], name: "chat_msg_idx_conv_role_time")
+  @@index([userId, createdAt], name: "chat_msg_idx_user_time")
+  @@index([userId, role, createdAt], name: "chat_msg_idx_user_role_time")
+  @@map("chat_messages")
+}
+
+model ChatFile {
+  id             BigInt   @id @default(autoincrement())
+  userId         BigInt   @map("user_id")
+  conversationId BigInt?  @map("conversation_id")
+  projectAssetId BigInt?  @unique @map("project_asset_id")
+  fileName       String   @map("file_name")
+  mimeType       String   @map("mime_type")
+  fileSize       Int      @map("file_size")
+  extension      String
+  extractedText  String   @map("extracted_text")
+  textLength     Int      @map("text_length")
+  status         String
+  errorMessage   String?  @map("error_message")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation ChatConversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  projectAsset ProjectAsset?     @relation(fields: [projectAssetId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt], name: "chat_file_idx_conv_time")
+  @@index([userId, createdAt], name: "chat_file_idx_user_time")
+  @@index([userId, status, createdAt], name: "chat_file_idx_user_status_time")
+  @@index([projectAssetId, createdAt], name: "chat_file_idx_project_asset_time")
+  @@map("chat_files")
+}

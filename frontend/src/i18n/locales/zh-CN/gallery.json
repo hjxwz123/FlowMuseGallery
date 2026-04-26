@@ -1,0 +1,8 @@
+{
+  "title": "我的作品",
+  "empty": "暂无作品",
+  "emptyDescription": "还没有本地作品，去创作工作台生成第一张图片或视频。",
+  "emptyAction": "开始创作",
+  "loadingMore": "正在加载更多作品...",
+  "end": "已加载全部作品"
+}

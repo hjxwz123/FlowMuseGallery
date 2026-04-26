@@ -1,0 +1,129 @@
+{
+  "title": "我的任务",
+  "subtitle": "统一查看图片和视频任务的状态、进度与结果。",
+  "hero": {
+    "badge": "任务"
+  },
+  "stats": {
+    "total": "{count} 个任务",
+    "visible": "显示 {count} 个"
+  },
+  "tabs": {
+    "all": "全部",
+    "pending": "等待中",
+    "processing": "生成中",
+    "completed": "已完成",
+    "failed": "失败"
+  },
+  "status": {
+    "pending": "等待中",
+    "processing": "生成中",
+    "completed": "已完成",
+    "failed": "失败"
+  },
+  "info": {
+    "type": "类型",
+    "model": "模型",
+    "prompt": "提示词",
+    "cost": "本地任务",
+    "createdAt": "创建时间",
+    "completedAt": "完成时间",
+    "error": "错误信息"
+  },
+  "failure": {
+    "reason": "失败原因",
+    "unknown": "上游没有返回具体失败原因",
+    "canceled": "任务已取消",
+    "modelRemoved": "模型已被移除或禁用",
+    "modalRequired": "需要继续提交 Midjourney 弹窗参数"
+  },
+  "actions": {
+    "view": "查看详情",
+    "retry": "重试",
+    "cancel": "取消",
+    "delete": "删除",
+    "download": "下载",
+    "share": "分享"
+  },
+  "midjourney": {
+    "actions": "操作",
+    "submitting": "提交中...",
+    "buttons": {
+      "upscale": "放大",
+      "upscale2x": "放大 2x",
+      "upscale4x": "放大 4x",
+      "variation": "变体",
+      "variations": "生成变体",
+      "varyRegion": "局部重绘",
+      "varySubtle": "微调变体",
+      "varyStrong": "强力变体",
+      "zoomOut": "缩小",
+      "zoomOut2x": "缩小 2x",
+      "zoomOut1_5x": "缩小 1.5x",
+      "customZoom": "自定义缩放",
+      "makeSquare": "变为正方形",
+      "panLeft": "向左扩展",
+      "panRight": "向右扩展",
+      "panUp": "向上扩展",
+      "panDown": "向下扩展",
+      "reroll": "重新生成",
+      "u1": "放大 1",
+      "u2": "放大 2",
+      "u3": "放大 3",
+      "u4": "放大 4",
+      "v1": "变体 1",
+      "v2": "变体 2",
+      "v3": "变体 3",
+      "v4": "变体 4",
+      "inpaint": "局部重绘"
+    }
+  },
+  "maskEditor": {
+    "title": "局部重绘",
+    "description": "在图片上涂抹要重绘的区域（白色区域将被重新生成）",
+    "brushSize": "画笔大小",
+    "prompt": "重绘提示词",
+    "promptPlaceholder": "描述你想在选中区域生成什么...",
+    "promptHint": "可选：留空将使用原始提示词",
+    "clear": "清空",
+    "cancel": "取消",
+    "submit": "提交",
+    "submitting": "提交中...",
+    "waitingForTask": "等待任务准备就绪...",
+    "loading": "加载图片中...",
+    "error": "提交失败，请重试"
+  },
+  "empty": {
+    "title": "暂无任务",
+    "description": "还没有创作任务，去创作工作台开始吧！",
+    "action": "开始创作"
+  },
+  "polling": {
+    "active": "正在实时同步任务状态..."
+  },
+  "confirm": {
+    "delete": {
+      "title": "确认删除",
+      "message": "确定要删除这个任务吗？此操作不可恢复。",
+      "confirm": "确认删除",
+      "cancel": "取消"
+    },
+    "retry": {
+      "title": "确认重试",
+      "message": "确定要重试这个任务吗？",
+      "confirm": "确认重试",
+      "cancel": "取消"
+    }
+  },
+  "success": {
+    "deleted": "任务已删除",
+    "retried": "任务已重新提交"
+  },
+  "errors": {
+    "load": "加载任务列表失败",
+    "delete": "删除任务失败",
+    "cancel": "取消任务失败",
+    "retry": "重试任务失败",
+    "mjAction": "执行 Midjourney 操作失败"
+  }
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "ai_model_idx_type_provider_active",
+    "table": "ai_models",
+    "columns": ["type", "provider", "is_active", "sort_order"]
+  },
+  {
+    "name": "image_task_idx_user_deleted_created",
+    "table": "image_tasks",
+    "columns": ["user_id", "deleted_at", "created_at"]
+  },
+  {
+    "name": "image_task_idx_user_status_deleted_completed",
+    "table": "image_tasks",
+    "columns": ["user_id", "status", "deleted_at", "completed_at"]
+  },
+  {
+    "name": "video_task_idx_user_status_completed_created",
+    "table": "video_tasks",
+    "columns": ["user_id", "status", "completed_at", "created_at"]
+  },
+  {
+    "name": "project_asset_idx_project_kind_time",
+    "table": "project_assets",
+    "columns": ["project_id", "kind", "created_at"]
+  },
+  {
+    "name": "project_asset_idx_user_kind_time",
+    "table": "project_assets",
+    "columns": ["user_id", "kind", "created_at"]
+  },
+  {
+    "name": "chat_conv_idx_user_last_message",
+    "table": "chat_conversations",
+    "columns": ["user_id", "last_message_at"]
+  },
+  {
+    "name": "chat_msg_idx_conv_role_time",
+    "table": "chat_messages",
+    "columns": ["conversation_id", "role", "created_at"]
+  },
+  {
+    "name": "chat_file_idx_user_status_time",
+    "table": "chat_files",
+    "columns": ["user_id", "status", "created_at"]
+  }
+]

@@ -1,0 +1,855 @@
+{
+  "meta": {
+    "name": "seedance_prompt_templates_starter_pack",
+    "version": "1.0.0",
+    "language": "zh-CN",
+    "created_at": "2026-04-26",
+    "description": "Seedance 视频生成网站可用的提示词模板 Starter JSON。包含分类、预览图字段、提示词、结构化参数、来源链接。",
+    "license_note": "模板为重新整理/原创改写，用于产品原型；source_resources 仅作为灵感和用户跳转来源，正式商用前请核对各站点条款。"
+  },
+  "schema": {
+    "id": "string",
+    "title": "string",
+    "category": "cinematic | product_ad | character | travel | anime | social | narrative | action | nature | asmr",
+    "tags": [
+      "string"
+    ],
+    "preview": {
+      "thumbnail_url": "string | replace_with_your_cdn_url",
+      "thumbnail_prompt": "string",
+      "alt": "string"
+    },
+    "seedance": {
+      "mode": "text_to_video | image_to_video | multimodal",
+      "duration_seconds": "number",
+      "aspect_ratio": "16:9 | 9:16 | 1:1",
+      "resolution": "720p | 1080p | 2K",
+      "prompt": "string",
+      "negative_prompt": "string",
+      "shots": [
+        {
+          "time": "string",
+          "camera": "string",
+          "scene": "string",
+          "action": "string",
+          "audio": "string"
+        }
+      ],
+      "params": {
+        "fps": "number",
+        "camera_motion": "string",
+        "lighting": "string",
+        "style": "string",
+        "constraints": [
+          "string"
+        ]
+      }
+    },
+    "source": {
+      "inspired_by": "string",
+      "url": "string"
+    }
+  },
+  "source_resources": [
+    {
+      "title": "Browse JSON Video Templates",
+      "url": "https://jsontovideo.org/json-prompt/",
+      "notes": "公开 JSON 视频模板库，页面显示 1,233 个模板，并声明覆盖 Veo 3.1 和 Seedance 2。适合参考 JSON 字段设计。"
+    },
+    {
+      "title": "Seedance Prompts GitHub",
+      "url": "https://github.com/seedanceprompts/seedance-prompts",
+      "notes": "Seedance 2.0 prompt 资源聚合仓库，包含 prompt gallery、工具、指南、创作者资源。"
+    },
+    {
+      "title": "Seedance2API Prompt Guide",
+      "url": "https://seedance2api.app/zh/blog/seedance-2-prompt-guide/",
+      "notes": "中文指南，强调“主体 + 动作 + 镜头 + 风格 + 约束”五段式结构，以及分镜/时间码写法。"
+    },
+    {
+      "title": "CDance Seedance 2.0 Prompt Library",
+      "url": "https://cdance.ai/prompts/seedance-2-0",
+      "notes": "带 playable results 和一键生成入口的 Seedance 2.0 prompt library，页面显示 1940 个示例。"
+    },
+    {
+      "title": "Seedance 2.0 Prompt Templates",
+      "url": "https://www.seedanceai.cc/prompt-templates",
+      "notes": "行业模板页，覆盖电商广告、品牌宣传片、声音设计、一镜到底、音乐节奏同步等场景。"
+    },
+    {
+      "title": "Higgsfield Seedance 2.0 Prompting Guide",
+      "url": "https://higgsfield.ai/blog/seedance-prompting-guide",
+      "notes": "完整 prompt library 风格教程，强调开头写清镜头数量、总时长、画幅比例。"
+    }
+  ],
+  "templates": [
+    {
+      "id": "sd_cinematic_001",
+      "title": "雨夜赛博朋克街头推镜",
+      "category": "cinematic",
+      "tags": [
+        "cyberpunk",
+        "neon",
+        "rain",
+        "cinematic",
+        "night"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_cinematic_001.jpg",
+        "thumbnail_prompt": "cinematic cyberpunk street at night, neon signs reflected on wet asphalt, lone person with umbrella, volumetric rain, 16:9",
+        "alt": "霓虹雨夜街头，一名撑伞人物站在反光路面上"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 8,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "8秒，16:9。雨夜赛博朋克街头，霓虹招牌倒映在湿漉漉的柏油路上，一名穿黑色长风衣的人撑伞缓慢前行。镜头从远景缓慢推入中景，雨滴与地面积水产生真实反射，背景有轻微车流光轨。电影级构图，青紫色霓虹，高对比，轻微胶片颗粒。无文字，无水印，人物比例稳定。",
+        "negative_prompt": "low quality, blurry, extra limbs, text, watermark, logo, distorted face",
+        "shots": [
+          {
+            "time": "00:00-00:03",
+            "camera": "wide shot, slow dolly in",
+            "scene": "neon street, wet asphalt, distant cars",
+            "action": "subject walks slowly with umbrella",
+            "audio": "soft rain, distant traffic hum"
+          },
+          {
+            "time": "00:03-00:08",
+            "camera": "medium shot, slight low angle",
+            "scene": "neon reflections become stronger",
+            "action": "subject pauses and turns head slightly",
+            "audio": "rain drops, low synth ambience"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "slow dolly in",
+          "lighting": "neon rim light, wet reflections",
+          "style": "cinematic cyberpunk, photorealistic",
+          "constraints": [
+            "no text",
+            "no watermark",
+            "consistent character",
+            "realistic rain physics"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "Seedance 五段式提示词结构 + prompt gallery 风格",
+        "url": "https://seedance2api.app/zh/blog/seedance-2-prompt-guide/"
+      }
+    },
+    {
+      "id": "sd_product_001",
+      "title": "高端香水 360° 产品广告",
+      "category": "product_ad",
+      "tags": [
+        "product",
+        "perfume",
+        "luxury",
+        "360 spin",
+        "commercial"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_product_001.jpg",
+        "thumbnail_prompt": "luxury perfume bottle on glossy black acrylic, gold rim light, floating mist, premium product photography, 16:9",
+        "alt": "黑色亚克力台面上的高端香水瓶，金色轮廓光"
+      },
+      "seedance": {
+        "mode": "image_to_video",
+        "duration_seconds": 6,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "使用参考图中的香水瓶作为唯一产品主体，6秒高端产品广告。香水瓶放置在黑色镜面亚克力台面上，瓶身缓慢 360 度旋转，周围有轻薄雾气和金色轮廓光。镜头固定在产品正前方，轻微推近，强调玻璃折射、液体质感和瓶盖金属高光。奢侈品广告质感，干净背景，无文字，无水印，产品外形保持一致。",
+        "negative_prompt": "extra bottles, changing label, wrong logo, text overlay, watermark, messy background",
+        "shots": [
+          {
+            "time": "00:00-00:02",
+            "camera": "locked product shot, slight push in",
+            "scene": "black glossy surface, dark premium background",
+            "action": "perfume bottle begins slow rotation",
+            "audio": "soft luxury ambience"
+          },
+          {
+            "time": "00:02-00:06",
+            "camera": "macro close-up transition",
+            "scene": "glass refraction, mist, gold rim light",
+            "action": "rotation reveals cap and liquid details",
+            "audio": "subtle sparkle sound"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "locked camera with subtle push-in",
+          "lighting": "gold rim light, glossy reflections",
+          "style": "luxury commercial, premium product photography",
+          "constraints": [
+            "preserve product shape",
+            "no text",
+            "no watermark",
+            "clean background"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "Seedance 2.0 Product Ad Templates",
+        "url": "https://www.seedanceai.cc/prompt-templates"
+      }
+    },
+    {
+      "id": "sd_travel_001",
+      "title": "京都清晨旅拍短片",
+      "category": "travel",
+      "tags": [
+        "travel",
+        "kyoto",
+        "morning",
+        "cinematic",
+        "slow motion"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_travel_001.jpg",
+        "thumbnail_prompt": "Kyoto alley at early morning, traditional wooden houses, soft mist, warm sunrise, cinematic travel shot, 9:16",
+        "alt": "清晨京都小巷，木屋、薄雾和晨光"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 10,
+        "aspect_ratio": "9:16",
+        "resolution": "1080p",
+        "prompt": "10秒，9:16 竖屏旅行短片。清晨的京都传统小巷，木质町屋、石板路、轻微薄雾和温暖晨光。一名旅行者背着小包从画面左侧缓慢走入，停下看向远处神社鸟居。镜头从低角度跟随脚步，再抬升到中景，节奏舒缓，真实自然光，胶片旅行纪录片质感。无文字，无水印，人物动作自然。",
+        "negative_prompt": "tourist crowd, text, watermark, flicker, shaky camera, deformed hands",
+        "shots": [
+          {
+            "time": "00:00-00:04",
+            "camera": "low tracking shot",
+            "scene": "stone street, wooden houses, morning mist",
+            "action": "traveler walks slowly into the alley",
+            "audio": "soft footsteps, distant birds"
+          },
+          {
+            "time": "00:04-00:10",
+            "camera": "tilt up to medium shot",
+            "scene": "sunlight reveals distant torii gate",
+            "action": "traveler stops and looks forward",
+            "audio": "light wind, ambient morning city"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "low tracking then tilt up",
+          "lighting": "warm sunrise, soft mist",
+          "style": "cinematic travel documentary",
+          "constraints": [
+            "vertical mobile format",
+            "no text",
+            "no watermark",
+            "natural motion"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "JSON video template travel/narrative categories",
+        "url": "https://jsontovideo.org/json-prompt/"
+      }
+    },
+    {
+      "id": "sd_action_001",
+      "title": "第一人称博物馆卡丁车追逐",
+      "category": "action",
+      "tags": [
+        "pov",
+        "go-kart",
+        "museum",
+        "speed",
+        "tracking"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_action_001.jpg",
+        "thumbnail_prompt": "first person go-kart racing through museum gallery, motion blur, marble columns, daylight, cinematic action, 16:9",
+        "alt": "第一人称卡丁车穿过博物馆展厅"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 7,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "7秒，第一人称 POV 卡丁车高速穿过大型博物馆展厅。画面可见方向盘、赛车手手套和前方大理石柱廊，艺术品与雕塑从两侧快速掠过。镜头为头盔广角运动相机视角，转弯时有真实头部晃动和速度感，地面反光，动作流畅。电影级动感，轻微运动模糊，无文字，无水印。",
+        "negative_prompt": "crash into people, gore, text, watermark, unstable geometry, broken steering wheel",
+        "shots": [
+          {
+            "time": "00:00-00:03",
+            "camera": "helmet-mounted wide angle POV",
+            "scene": "museum corridor with columns and paintings",
+            "action": "kart accelerates forward",
+            "audio": "engine echo, tire squeak"
+          },
+          {
+            "time": "00:03-00:07",
+            "camera": "rapid corner tilt, head bob",
+            "scene": "sunlit gallery exit",
+            "action": "kart drifts around a marble column and exits",
+            "audio": "engine rev, echo fades"
+          }
+        ],
+        "params": {
+          "fps": 30,
+          "camera_motion": "POV tracking, head bob, corner tilts",
+          "lighting": "natural daylight and warm gallery spotlights",
+          "style": "cinematic action, realistic textures",
+          "constraints": [
+            "no text",
+            "no watermark",
+            "no injury",
+            "smooth motion"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "JSON to Video action template structure",
+        "url": "https://jsontovideo.org/json-prompt/"
+      }
+    },
+    {
+      "id": "sd_anime_001",
+      "title": "二次元雨中剑士登场",
+      "category": "anime",
+      "tags": [
+        "anime",
+        "samurai",
+        "rain",
+        "dramatic",
+        "character"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_anime_001.jpg",
+        "thumbnail_prompt": "anime samurai standing in rain, blue lightning in background, dramatic rim light, cinematic 2D animation, 16:9",
+        "alt": "雨中持剑的二次元武士，背景有蓝色闪电"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 8,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "8秒动漫风格短片。暴雨夜晚，一名年轻剑士站在屋顶边缘，黑色披风被风吹起，手握长刀，背景闪过蓝色雷光。镜头从脚边积水倒影开始，快速上移到半身，再切到眼神特写。雨滴、披风、发丝运动自然，日式动画电影质感，强烈轮廓光，角色设计保持一致。无文字，无水印。",
+        "negative_prompt": "extra fingers, changing outfit, text, watermark, low frame consistency, messy hair deformation",
+        "shots": [
+          {
+            "time": "00:00-00:03",
+            "camera": "low angle reflection shot, tilt up",
+            "scene": "rooftop puddle reflects lightning",
+            "action": "cloak moves in wind",
+            "audio": "heavy rain, distant thunder"
+          },
+          {
+            "time": "00:03-00:08",
+            "camera": "close-up on eyes, slight push in",
+            "scene": "blue lightning rim light",
+            "action": "swordsman slowly raises the blade",
+            "audio": "blade ring, thunder hit"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "tilt up, dramatic close-up",
+          "lighting": "blue lightning rim light",
+          "style": "cinematic anime, high-detail 2D animation",
+          "constraints": [
+            "consistent character",
+            "no text",
+            "no watermark",
+            "natural rain motion"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "Seedance prompt library anime/action examples",
+        "url": "https://cdance.ai/prompts/seedance-2-0"
+      }
+    },
+    {
+      "id": "sd_food_asmr_001",
+      "title": "番茄切片 ASMR 厨房短片",
+      "category": "asmr",
+      "tags": [
+        "food",
+        "asmr",
+        "kitchen",
+        "macro",
+        "healing"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_food_asmr_001.jpg",
+        "thumbnail_prompt": "macro shot of fresh tomato being sliced on wooden board, morning kitchen light, ASMR cinematic, 16:9",
+        "alt": "木质砧板上切新鲜番茄的微距画面"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 9,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "9秒治愈系厨房 ASMR 短片。清晨自然光洒进现代开放式厨房，一颗新鲜红番茄放在木质砧板上。镜头为极近微距，厨刀缓慢切下，番茄汁水和果肉纹理清晰可见。切片动作稳定、真实，背景轻微虚化，色调温暖自然，商业食品摄影质感。无文字，无水印，无手部畸形。",
+        "negative_prompt": "dirty kitchen, text, watermark, deformed hands, unnatural knife motion, gore",
+        "shots": [
+          {
+            "time": "00:00-00:04",
+            "camera": "extreme macro, shallow depth of field",
+            "scene": "tomato on wooden cutting board",
+            "action": "knife approaches slowly",
+            "audio": "soft room tone"
+          },
+          {
+            "time": "00:04-00:09",
+            "camera": "macro side angle",
+            "scene": "tomato slices and juice details",
+            "action": "knife makes two clean slices",
+            "audio": "crisp cutting sound, subtle ASMR"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "static macro with slight push",
+          "lighting": "soft natural morning light",
+          "style": "healing kitchen commercial, ASMR macro",
+          "constraints": [
+            "no text",
+            "no watermark",
+            "realistic food texture",
+            "safe knife handling"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "Modern rural/healing prompt examples and ASMR categories",
+        "url": "https://cdance.ai/prompts/seedance-2-0"
+      }
+    },
+    {
+      "id": "sd_social_001",
+      "title": "短视频开场：咖啡杯变城市",
+      "category": "social",
+      "tags": [
+        "shorts",
+        "transition",
+        "coffee",
+        "surreal",
+        "hook"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_social_001.jpg",
+        "thumbnail_prompt": "coffee cup on desk transforming into miniature city skyline, steam becomes clouds, surreal commercial, 9:16",
+        "alt": "咖啡杯中的泡沫变成微型城市"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 6,
+        "aspect_ratio": "9:16",
+        "resolution": "1080p",
+        "prompt": "6秒竖屏短视频开场钩子。桌面上一杯热咖啡，镜头从杯口上方缓慢下降，咖啡泡沫逐渐变成一座微型城市天际线，热气变成云层穿过高楼。转场自然，超现实但质感真实，适合 Reels/TikTok 开头。画面干净，中心构图，无文字，无水印。",
+        "negative_prompt": "text, watermark, messy transformation, low resolution, unstable buildings",
+        "shots": [
+          {
+            "time": "00:00-00:02",
+            "camera": "top-down close-up",
+            "scene": "coffee cup on minimal desk",
+            "action": "steam rises slowly",
+            "audio": "soft cafe ambience"
+          },
+          {
+            "time": "00:02-00:06",
+            "camera": "slow push into cup",
+            "scene": "foam transforms into miniature skyline",
+            "action": "steam becomes clouds around buildings",
+            "audio": "magical whoosh, subtle city ambience"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "top-down push in",
+          "lighting": "soft morning desk light",
+          "style": "surreal commercial, social media hook",
+          "constraints": [
+            "vertical format",
+            "no text",
+            "no watermark",
+            "smooth morph"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "Seedance social/video hook prompt patterns",
+        "url": "https://seedanceprompt.com/prompts"
+      }
+    },
+    {
+      "id": "sd_nature_001",
+      "title": "雨林微距：蝴蝶振翅",
+      "category": "nature",
+      "tags": [
+        "nature",
+        "macro",
+        "butterfly",
+        "rainforest",
+        "slow motion"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_nature_001.jpg",
+        "thumbnail_prompt": "macro butterfly on rainforest leaf with water droplets, soft green bokeh, slow motion nature film, 16:9",
+        "alt": "雨林叶片上的蝴蝶与水滴微距"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 8,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "8秒自然纪录片微距镜头。热带雨林中，一只蓝色蝴蝶停在带有水滴的绿色叶片上，翅膀缓慢开合。镜头极近微距，背景柔和散景，水滴反射晨光。蝴蝶起飞瞬间进入慢动作，翅膀纹理清晰，真实自然，不夸张。无文字，无水印。",
+        "negative_prompt": "fake insect, text, watermark, distorted wings, over-saturated colors",
+        "shots": [
+          {
+            "time": "00:00-00:05",
+            "camera": "macro close-up, static",
+            "scene": "butterfly on wet rainforest leaf",
+            "action": "wings open and close slowly",
+            "audio": "rainforest ambience, light droplets"
+          },
+          {
+            "time": "00:05-00:08",
+            "camera": "macro follow focus",
+            "scene": "green bokeh background",
+            "action": "butterfly lifts off in slow motion",
+            "audio": "soft wing flutter"
+          }
+        ],
+        "params": {
+          "fps": 30,
+          "camera_motion": "macro static then slight follow focus",
+          "lighting": "soft filtered morning light",
+          "style": "BBC-style nature documentary macro",
+          "constraints": [
+            "no text",
+            "no watermark",
+            "realistic insect motion"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "JSON video template nature category",
+        "url": "https://jsontovideo.org/json-prompt/"
+      }
+    },
+    {
+      "id": "sd_brand_001",
+      "title": "极简科技品牌发布片",
+      "category": "product_ad",
+      "tags": [
+        "brand",
+        "tech",
+        "launch",
+        "minimal",
+        "motion design"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_brand_001.jpg",
+        "thumbnail_prompt": "minimal futuristic product launch stage, floating glass UI panels, black and silver palette, cinematic tech commercial, 16:9",
+        "alt": "极简科技产品发布场景，悬浮玻璃 UI 面板"
+      },
+      "seedance": {
+        "mode": "multimodal",
+        "duration_seconds": 12,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "12秒极简科技品牌发布短片。深色无缝背景中，一个银黑色科技产品缓慢从阴影中显现，周围出现半透明玻璃质感 UI 光带。镜头先从黑场推入产品轮廓，再环绕半圈展示细节，最后停在正面英雄镜头。未来感、干净、高级，光线克制，适合官网首屏视频。无文字，无水印，产品形态稳定。",
+        "negative_prompt": "text, watermark, messy UI, product changing shape, noisy background",
+        "shots": [
+          {
+            "time": "00:00-00:04",
+            "camera": "slow reveal from darkness",
+            "scene": "minimal black studio",
+            "action": "product silhouette appears",
+            "audio": "deep cinematic rise"
+          },
+          {
+            "time": "00:04-00:09",
+            "camera": "half orbit around product",
+            "scene": "floating glass UI light trails",
+            "action": "UI panels animate around product",
+            "audio": "soft digital pulses"
+          },
+          {
+            "time": "00:09-00:12",
+            "camera": "hero front shot",
+            "scene": "clean futuristic stage",
+            "action": "product locks into final position",
+            "audio": "subtle impact, ambience"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "reveal, orbit, hero lock",
+          "lighting": "controlled rim light, silver highlights",
+          "style": "premium tech launch film",
+          "constraints": [
+            "no text",
+            "no watermark",
+            "consistent product geometry",
+            "clean background"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "Brand promotional film templates",
+        "url": "https://www.seedanceai.cc/prompt-templates"
+      }
+    },
+    {
+      "id": "sd_narrative_001",
+      "title": "森林童话：寻找发光小屋",
+      "category": "narrative",
+      "tags": [
+        "fairytale",
+        "forest",
+        "story",
+        "magical realism",
+        "cinematic"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_narrative_001.jpg",
+        "thumbnail_prompt": "twilight magical forest clearing, small crumbling hut with warm glowing window, young traveler silhouette, cinematic fairytale, 16:9",
+        "alt": "暮色森林中有一间发光小屋，旅行者靠近"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 12,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "12秒童话叙事短片。暮色森林空地中，一名年轻旅行者手持微弱发光的玻璃瓶，缓慢走向远处一间破旧小屋。小屋烟囱冒出细烟，窗户透出不自然的温暖光。镜头先从森林枝叶后窥视，再跟随旅行者背影推进，最后停在门前，营造神秘紧张感。电影童话质感，柔和蓝绿夜色，无文字，无水印。",
+        "negative_prompt": "text, watermark, horror gore, deformed character, overly cartoonish",
+        "shots": [
+          {
+            "time": "00:00-00:04",
+            "camera": "hidden observer shot through leaves",
+            "scene": "twilight forest clearing",
+            "action": "traveler enters with glowing bottle",
+            "audio": "forest insects, soft wind"
+          },
+          {
+            "time": "00:04-00:09",
+            "camera": "slow follow shot from behind",
+            "scene": "crumbling hut with smoke",
+            "action": "traveler approaches cautiously",
+            "audio": "distant wooden creak"
+          },
+          {
+            "time": "00:09-00:12",
+            "camera": "static close shot on door",
+            "scene": "warm light under the door",
+            "action": "traveler raises hand to knock",
+            "audio": "low magical hum"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "observer shot, follow shot, static door close-up",
+          "lighting": "twilight blue with warm window glow",
+          "style": "cinematic magical realism",
+          "constraints": [
+            "no text",
+            "no watermark",
+            "family-friendly tension",
+            "consistent traveler design"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "JSON to Video narrative template structure",
+        "url": "https://jsontovideo.org/json-prompt/"
+      }
+    },
+    {
+      "id": "sd_fashion_001",
+      "title": "高定礼服盐湖幻想大片",
+      "category": "cinematic",
+      "tags": [
+        "fashion",
+        "haute couture",
+        "fantasy",
+        "salt flat",
+        "editorial"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_fashion_001.jpg",
+        "thumbnail_prompt": "haute couture model on mirror-like salt flat, dark clouds, porcelain blue dress, cinematic editorial, 16:9",
+        "alt": "盐湖镜面上穿高定礼服的模特，天空有暗云"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 15,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "15秒高定幻想时尚大片。镜面般的盐湖上，一名模特穿着蓝白瓷器纹理的流动礼服缓慢行走，暗云压低，地面完整倒映天空与人物。镜头从超广角远景开始，缓慢推进，礼服边缘像液体墨水一样轻微扩散，最后化作几只抽象水墨燕子掠过画面。写实高端时尚摄影，梦幻但保持人物真实比例。无文字，无水印。",
+        "negative_prompt": "text, watermark, deformed body, broken reflection, chaotic dress shape",
+        "shots": [
+          {
+            "time": "00:00-00:05",
+            "camera": "ultra wide establishing shot",
+            "scene": "mirror-like salt flat under dark clouds",
+            "action": "model walks slowly",
+            "audio": "wind, distant cinematic swell"
+          },
+          {
+            "time": "00:05-00:11",
+            "camera": "slow dolly in to full body",
+            "scene": "blue-white porcelain dress reflection",
+            "action": "dress edges ripple like ink",
+            "audio": "soft fabric movement, ambient strings"
+          },
+          {
+            "time": "00:11-00:15",
+            "camera": "medium shot, slight orbit",
+            "scene": "ink swallows cross foreground",
+            "action": "model pauses as swallows pass",
+            "audio": "subtle magical whoosh"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "wide push-in, slight orbit",
+          "lighting": "dramatic overcast sky, reflective ground",
+          "style": "haute couture fantasy editorial, photorealistic",
+          "constraints": [
+            "no text",
+            "no watermark",
+            "consistent model",
+            "coherent reflections"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "CDance featured fashion/fantasy Seedance examples",
+        "url": "https://cdance.ai/prompts/seedance-2-0"
+      }
+    },
+    {
+      "id": "sd_audio_001",
+      "title": "音乐节拍同步：几何图形变形",
+      "category": "social",
+      "tags": [
+        "music sync",
+        "motion graphics",
+        "beat",
+        "abstract",
+        "loop"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_audio_001.jpg",
+        "thumbnail_prompt": "abstract geometric shapes morphing with music beat, glossy colorful motion graphics, black background, 9:16",
+        "alt": "黑色背景上随节拍变形的几何图形"
+      },
+      "seedance": {
+        "mode": "multimodal",
+        "duration_seconds": 8,
+        "aspect_ratio": "9:16",
+        "resolution": "1080p",
+        "prompt": "8秒竖屏节拍同步动效。黑色背景中，彩色玻璃质感几何体随音乐节拍弹跳、旋转、分裂并重新组合。每个强拍触发一次形状变化，弱拍产生轻微光波扩散。运动要干净、节奏明确、适合短视频循环开头。无文字，无水印。",
+        "negative_prompt": "text, watermark, noisy background, random flicker, off-beat motion",
+        "shots": [
+          {
+            "time": "00:00-00:04",
+            "camera": "centered static camera",
+            "scene": "single glossy sphere on black background",
+            "action": "sphere pulses and splits on each beat",
+            "audio": "@audio beat reference, synced pulses"
+          },
+          {
+            "time": "00:04-00:08",
+            "camera": "slight zoom with beat",
+            "scene": "multiple geometric shapes orbit",
+            "action": "shapes recombine into one loopable icon",
+            "audio": "@audio beat reference, final impact"
+          }
+        ],
+        "params": {
+          "fps": 30,
+          "camera_motion": "subtle beat-synced zoom",
+          "lighting": "glossy neon highlights on black",
+          "style": "premium motion graphics, clean loop",
+          "constraints": [
+            "no text",
+            "no watermark",
+            "sync to beat",
+            "loop-friendly ending"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "Music Beat Synchronization templates",
+        "url": "https://www.seedanceai.cc/prompt-templates"
+      }
+    },
+    {
+      "id": "sd_realestate_001",
+      "title": "豪宅室内一镜到底",
+      "category": "cinematic",
+      "tags": [
+        "real estate",
+        "one take",
+        "interior",
+        "luxury",
+        "camera movement"
+      ],
+      "preview": {
+        "thumbnail_url": "/previews/sd_realestate_001.jpg",
+        "thumbnail_prompt": "luxury modern villa interior, one-take camera move from living room to pool view, sunset light, 16:9",
+        "alt": "现代豪宅室内一镜到底，客厅通向泳池景观"
+      },
+      "seedance": {
+        "mode": "text_to_video",
+        "duration_seconds": 12,
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "prompt": "12秒豪宅室内一镜到底。现代别墅客厅，落地窗外是夕阳和泳池。镜头从沙发旁缓慢滑行，穿过客厅，经过大理石岛台，最后推向落地窗外的泳池景观。空间宽敞，高端室内设计，木质、石材和玻璃质感真实，运动连续无明显剪切。无文字，无水印，无人物。",
+        "negative_prompt": "text, watermark, people, warped architecture, impossible layout, flicker",
+        "shots": [
+          {
+            "time": "00:00-00:04",
+            "camera": "smooth gimbal slide",
+            "scene": "luxury living room with sofa and marble table",
+            "action": "camera glides forward",
+            "audio": "soft room ambience"
+          },
+          {
+            "time": "00:04-00:08",
+            "camera": "continuous move past kitchen island",
+            "scene": "open kitchen, stone and wood surfaces",
+            "action": "camera reveals depth of space",
+            "audio": "subtle airy ambience"
+          },
+          {
+            "time": "00:08-00:12",
+            "camera": "push toward floor-to-ceiling window",
+            "scene": "pool and sunset view",
+            "action": "camera settles on exterior view",
+            "audio": "soft outdoor breeze"
+          }
+        ],
+        "params": {
+          "fps": 24,
+          "camera_motion": "seamless one-take gimbal move",
+          "lighting": "warm sunset through glass",
+          "style": "luxury real estate cinematic walkthrough",
+          "constraints": [
+            "one-take continuity",
+            "no text",
+            "no watermark",
+            "stable architecture"
+          ]
+        }
+      },
+      "source": {
+        "inspired_by": "One-take long shot techniques",
+        "url": "https://www.seedanceai.cc/prompt-templates"
+      }
+    }
+  ]
+}

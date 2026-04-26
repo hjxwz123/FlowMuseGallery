@@ -1,0 +1,12 @@
+node_modules
+frontend/node_modules
+dist
+frontend/.next
+uploads
+tmp
+.git
+.gitignore
+.env
+.env.docker
+*.log
+.DS_Store

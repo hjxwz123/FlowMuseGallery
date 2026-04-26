@@ -1,0 +1,64 @@
+{
+  "loading": "Loading...",
+  "loadMore": "Load More",
+  "noData": "No data",
+  "save": "Save",
+  "nav": {
+    "gallery": "Gallery",
+    "create": "Create",
+    "prompts": "Prompts",
+    "tasks": "Tasks",
+    "settings": "Local Settings"
+  },
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "delete": "Delete",
+    "edit": "Edit",
+    "generate": "Generate",
+    "retry": "Retry",
+    "download": "Download",
+    "share": "Share",
+    "upload": "Upload",
+    "search": "Search",
+    "confirm": "Confirm",
+    "back": "Back"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "close": "Close",
+    "generate": "Generate",
+    "retry": "Retry",
+    "download": "Download",
+    "share": "Share",
+    "upload": "Upload",
+    "search": "Search",
+    "confirm": "Confirm",
+    "back": "Back"
+  },
+  "labels": {
+    "prompt": "Prompt",
+    "negativePrompt": "Negative Prompt",
+    "model": "Model",
+    "status": "Status",
+    "description": "Description",
+    "createdAt": "Created At"
+  },
+  "placeholders": {
+    "enterPrompt": "Enter your prompt to describe the image you want...",
+    "enterVideoPrompt": "Enter your prompt to describe the video you want..."
+  },
+  "status": {
+    "pending": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "failed": "Failed",
+    "active": "Active"
+  }
+}

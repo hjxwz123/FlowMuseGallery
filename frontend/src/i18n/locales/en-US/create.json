@@ -1,0 +1,423 @@
+{
+  "title": "Fast Mode",
+  "subtitle": "Let AI help you create beautiful images and videos",
+  "hub": {
+    "badge": "Creation Hub",
+    "title": "Unified Creation Entry",
+    "subtitle": "Common creation entries are grouped here for faster creative navigation.",
+    "workspaceTag": "Current Page",
+    "items": {
+      "workspace": {
+        "title": "Creation Studio",
+        "description": "Continue generating images/videos and tuning parameters on this page."
+      },
+      "inspiration": {
+        "title": "My Works",
+        "description": "View locally generated image and video works."
+      },
+      "templates": {
+        "title": "Network Prompts",
+        "description": "Start quickly from network prompts and apply them to the create page."
+      },
+      "tools": {
+        "title": "Network Prompts",
+        "description": "Browse network prompts and start image or video creation quickly."
+      }
+    },
+    "stats": {
+      "templates": "{count} prompts",
+      "tools": "{count} prompts"
+    },
+    "open": "Open"
+  },
+  "toolHub": {
+    "modeTitle": "Creation Mode"
+  },
+  "tabs": {
+    "image": "Image Creation",
+    "video": "Video Creation"
+  },
+  "modes": {
+    "template": "Use Network Prompt",
+    "custom": "Custom Creation"
+  },
+  "templates": {
+    "title": "Choose a Network Prompt",
+    "subtitle": "Start from network prompts to make AI creation easier",
+    "categories": {
+      "all": "All",
+      "portrait": "Portrait",
+      "landscape": "Landscape",
+      "product": "Product",
+      "art": "Art",
+      "video": "Video"
+    },
+    "useTemplate": "Use This Prompt",
+    "examplePrompts": "Example Prompts:",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "noTemplates": "No {type} prompts in this category",
+    "backToTemplates": "Back to Prompts",
+    "currentTemplate": "Current Prompt: {name}"
+  },
+  "steps": {
+    "step1": "Choose AI Model",
+    "step2": "Describe What You Want to Create",
+    "step3": "Adjust Parameters (Optional)"
+  },
+  "projectContext": {
+    "title": "Project Context",
+    "subtitle": "When a project is selected, its description is included in prompt optimization, and checked project assets are used together with local uploads as references.",
+    "manage": "Manage Projects",
+    "loading": "Loading projects...",
+    "selectLabel": "Select project (optional)",
+    "none": "No project",
+    "assetCount": "{count} assets",
+    "inspirationCount": "{count} inspiration item(s)",
+    "promptCount": "{count} prompt(s)",
+    "selectedCount": "{count} project asset(s) selected",
+    "descriptionEmpty": "This project does not have a description yet. You can add one from the project page.",
+    "coverImage": "Cover image",
+    "coverVideo": "Cover video",
+    "emptyTitle": "No projects yet",
+    "emptyDescription": "Create a project first, then upload assets or import your own past works so you can reuse them here.",
+    "unsupportedHint": "The current model does not support reference assets, but you can still link the task to a project and use the project description in prompt optimization.",
+    "assetSectionTitle": "Choose project assets for this generation",
+    "assetSectionHint": "These assets will be combined with local uploads for the current run.",
+    "openAssetPicker": "Choose Project Assets",
+    "assetModalTitle": "Choose Project Assets",
+    "done": "Done",
+    "moreSelected": "{count} more",
+    "noAssets": "This project does not have any assets yet. Add some from the project page first.",
+    "noUsableAssets": "This project has assets, but the current mode can only use compatible ones.",
+    "kindImage": "Image",
+    "kindVideo": "Video",
+    "fromTask": "My work",
+    "fromUpload": "Manual upload"
+  },
+  "models": {
+    "title": "Choose AI Model",
+    "subtitle": "Each model has different styles and features, choose the one that suits you best",
+    "noModels": "No {type} generation models available",
+    "features": {
+      "async": "Async Generation",
+      "imageToImage": "Image-to-Image",
+      "highRes": "High Resolution"
+    }
+  },
+  "form": {
+    "model": {
+      "label": "Select Model",
+      "placeholder": "Please select a model"
+    },
+    "prompt": {
+      "label": "Creation Description",
+      "placeholder": "e.g., A young woman in professional attire, confident smile, office background...",
+      "placeholderVideo": "e.g., Ocean waves gently hitting the beach, sunset, slow motion...",
+      "hint": " Tip: Detailed descriptions help AI better understand your needs. Type @ to reference uploaded or selected images, videos, or audio.",
+      "optimize": "AI Optimize",
+      "optimizing": "Optimizing...",
+      "optimizedResult": "AI Optimized Results (pick one to use)",
+      "useOptimized": "Use",
+      "includeImages": "Include reference images",
+      "optimizeError": "Prompt optimization failed, please try again",
+      "mentionUnavailable": "Upload or select at least one image, video, or audio asset before using @ references",
+      "mentionButtonTitle": "Reference uploaded or selected media",
+      "mentionPickerTitle": "Choose media to reference",
+      "mentionPickerCount": "{count} item(s)"
+    },
+    "negativePrompt": {
+      "label": "Advanced: Exclude Unwanted Elements (Optional)",
+      "placeholder": "e.g., blurry, low quality, distorted...",
+      "hint": "Describe what you don't want in the artwork"
+    },
+    "uploadReference": {
+      "label": "Upload Reference Images",
+      "labelVideo": "Upload First/Last Frames",
+      "labelVideoReference": "Upload Reference Images",
+      "labelDoubaoReferenceImages20": "Upload Reference Images",
+      "labelDoubaoReferenceVideos20": "Upload Reference Videos",
+      "labelDoubaoReferenceAudios20": "Upload Reference Audio",
+      "labelDoubaoFrames20": "Upload First/Last Frames",
+      "labelWanxReferenceImages": "Upload Reference Images",
+      "labelWanxReferenceVideos": "Upload Reference Videos",
+      "labelWanxReferenceAudios": "Upload Reference Audio",
+      "labelWanxDrivingAudio": "Upload Driving Audio",
+      "labelWanxFirstFrame": "Upload First Frame",
+      "labelWanxLastFrame": "Upload Last Frame",
+      "labelWanxVideoContinuation": "Video Continuation",
+      "labelWanxContinuationVideo": "Upload Continuation Video",
+      "optional": "(Optional)",
+      "mode": {
+        "imageToImage": "Image-to-Image Mode",
+        "textToImage": "Text-to-Image Mode"
+      },
+      "selected": "{count} image(s) selected",
+      "maxFiles": "Max {max} images",
+      "maxItems": "Up to {max} files",
+      "dropzoneIdle": "Drag files here, or click to upload",
+      "dropzoneDragging": "Release to upload files",
+      "fileLimitHint": "Up to {max} files, each no larger than {size}MB",
+      "hint": "Optional: Upload reference images for image-to-image creation",
+      "hintWithImages": "{count} image(s) selected, will use image-to-image mode",
+      "hintVideoReference": "Optional: Upload reference image(s) for image-to-video generation",
+      "hintVideoReferenceWithImages": "{count} reference image(s) selected for video generation",
+      "hintDoubaoVideoExclusive": "Note: For Doubao, reference images and first/last frames are mutually exclusive",
+      "hintDoubaoReferenceImages": "Optional: Upload 1-4 reference images (mutually exclusive with first/last frames)",
+      "hintDoubaoReferenceImages20": "Optional: Upload 1-9 reference images.",
+      "hintDoubaoReferenceVideos20": "Optional: Upload 1-3 reference videos.",
+      "hintDoubaoReferenceAudios20": "Optional: Upload 1-3 reference audio clips. Audio cannot be used alone and must be paired with at least one reference image or reference video.",
+      "hintDoubaoFrames20": "Optional: Upload 1-2 images. The first image becomes the first frame, and the second image becomes the last frame.",
+      "hintWanxUpload": "Wanx supports mixed image, video, and audio references. Reference images plus reference videos can total up to 5 items, and wan2.7 can also take 1 first-frame image at the same time. If any reference video is included, duration must stay between 2 and 10 seconds; otherwise it can be 2 to 15 seconds.",
+      "hintWanxReferenceImages": "Optional: Upload reference images. They work together with reference videos for subject and scene control, with a combined visual limit of 5.",
+      "hintWanxReferenceVideos": "Optional: Upload reference videos. Once a reference video is present, the video duration must stay within 2-10 seconds.",
+      "hintWanxReferenceAudios": "Optional: Upload reference audio clips to define the voice timbre for the matched subject. Audio count cannot exceed the total number of reference images and reference videos.",
+      "hintWanxFirstFrame": "Optional: Upload 1 first-frame image. It can be used together with reference images and reference videos and is not mutually exclusive with them.",
+      "hintWanxFirstFrameRatio": "When a first-frame image is uploaded, Wanx follows that image ratio automatically, so the aspect ratio setting is ignored.",
+      "hintFirstFrame": "First frame uploaded, video will start from this image",
+      "hintFirstAndLastFrame": "First and last frames uploaded, video will transition from first to last frame",
+      "hintDoubaoVideo": "Optional: Upload 1-2 images. 1st image as first frame, 2nd image as last frame (optional)"
+    },
+    "parameters": {
+      "label": "Adjust Parameters (Optional)",
+      "aspectRatio": "Aspect Ratio",
+      "imageSize": "Image Resolution",
+      "imageResolution": "Image Size",
+      "mjBotType": "Model Version",
+      "mjAdvanced": "More Parameters",
+      "mjVersion": "Version (--v)",
+      "mjQuality": "Quality (--q)",
+      "mjStyleRaw": "Style (--style)",
+      "mjStylize": "Stylize (--s)",
+      "mjChaos": "Chaos (--c)",
+      "mjWeird": "Weird (--weird)",
+      "mjIw": "Image Weight (--iw)",
+      "mjNo": "Exclude (--no)",
+      "mjNoPlaceholder": "e.g., blurry, text",
+      "mjSeedPlaceholder": "Random number",
+      "mjTile": "Tile Mode (--tile)",
+      "mjPersonalize": "Personalize (--p)",
+      "videoSize": "Video Size",
+      "videoDuration": "Video Duration",
+      "videoResolution": "Video Resolution",
+      "aspectRatios": {
+        "1:1": "1:1 Square",
+        "3:4": "3:4 Portrait",
+        "4:3": "4:3 Landscape",
+        "16:9": "16:9 Widescreen",
+        "9:16": "9:16 Portrait"
+      },
+      "duration": "Video Duration",
+      "durations": {
+        "5": "5 seconds",
+        "10": "10 seconds",
+        "15": "15 seconds"
+      },
+      "resolution": "Video Resolution",
+      "generateAudio": "Generate Audio",
+      "generateAudioHint": "Seedance 2.0 will generate matching speech, sound effects, and background music from the visuals and prompt.",
+      "switchOn": "On",
+      "switchOff": "Off",
+      "resolutions": {
+        "720p": "720p HD",
+        "1080p": "1080p Full HD"
+      },
+      "seed": "Seed",
+      "style": "Style"
+    }
+  },
+  "videoAssistant": {
+    "badge": "Director Assist",
+    "title": "Start faster, even if you don't know how to write prompts",
+    "subtitle": "Describe the idea in plain language, choose a few options, and AI will generate 1 more professional video prompt for you.",
+    "ideaLabel": "One-line idea",
+    "ideaPlaceholder": "e.g. Create a premium skincare ad video that feels clean, warm, and cinematic",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "e.g. a cream jar / a young woman / a sports car",
+    "sceneLabel": "Scene",
+    "scenePlaceholder": "e.g. morning bathroom / city nightscape / seaside road",
+    "actionLabel": "Key action",
+    "actionPlaceholder": "e.g. slowly turns toward camera / waves hit the rocks softly",
+    "mustKeepLabel": "Must keep",
+    "mustKeepPlaceholder": "e.g. logo stays clear, subject remains centered, preserve warm golden tones",
+    "goalLabel": "Creative goal",
+    "styleLabel": "Visual style",
+    "cameraLabel": "Camera language",
+    "paceLabel": "Pacing",
+    "audioLabel": "Audio strategy",
+    "generate": "AI Generate Professional Prompt",
+    "generating": "AI is generating your professional prompt...",
+    "generateHint": "AI will combine your idea, camera, pacing, and audio strategy into 1 professional prompt ready for video models.",
+    "generatedCount": "Generated {count} professional prompt(s)",
+    "useVariant": "Use this professional prompt",
+    "emptyError": "Add at least a bit of idea, subject, scene, or action before generating a professional prompt",
+    "generateError": "Director Assist failed to generate a prompt. Please try again.",
+    "loginRequired": "Enter content before using Director Assist",
+    "secondsSuffix": "s",
+    "mediaHint": "Use uploaded references to keep the subject, camera motion, or audio mood aligned.",
+    "projectAssetHint": "{count} project asset(s) selected. Keep their subject or style consistent in the final prompt.",
+    "audioGenerateHint": "If the model supports it, generate audio that better matches the visual rhythm and mood.",
+    "prefix": {
+      "idea": "Core idea: ",
+      "subject": "Subject: ",
+      "scene": "Scene: ",
+      "action": "Action: ",
+      "mustKeep": "Must keep: ",
+      "duration": "Suggested duration ",
+      "ratio": "Aspect ratio "
+    },
+    "audioDirectives": {
+      "immersive": "Audio should emphasize immersive ambience, detailed sound design, and mood music synced with the visuals.",
+      "narration": "Audio should emphasize clear voice delivery, suitable for narration, spoken lines, or ad copy.",
+      "ambience": "Audio should focus on environmental ambience and natural atmosphere rather than heavy vocal performance.",
+      "silent": "Design the shot like a silent video, with the visual storytelling carrying the full message."
+    },
+    "variants": {
+      "professional": {
+        "title": "Professional Prompt",
+        "description": "AI-generated version synthesized from your creative brief"
+      },
+      "balanced": {
+        "title": "Balanced",
+        "description": "Safer and easier to submit directly"
+      },
+      "cinematic": {
+        "title": "Cinematic Boost",
+        "description": "Stronger on camera language, lighting, and atmosphere"
+      },
+      "creative": {
+        "title": "Creative Expansion",
+        "description": "More memorable and shareable"
+      }
+    },
+    "variantDirectives": {
+      "balanced": "Keep the main subject clear, actions coherent, and spatial relationships understandable. Avoid abrupt distortion and irrelevant elements. The result should feel stable and production-ready.",
+      "cinematic": "Emphasize shot scale changes, foreground and background depth, lighting transitions, and emotional progression so the output feels like a polished short film.",
+      "creative": "Add a stronger opening hook and more memorable visual moments, while keeping the subject stable, recognizable, and narratively focused."
+    },
+    "refineTitle": "Quick refinements",
+    "refineSubtitle": "If the current description is close but not there yet, append one clear refinement direction.",
+    "refineApplied": "The refinement direction was added to the current description",
+    "refines": {
+      "ad": "More polished",
+      "cinematic": "More cinematic",
+      "natural": "More natural motion",
+      "stable": "More stable camera",
+      "rhythm": "Sharper pacing"
+    },
+    "refinePatches": {
+      "ad": "Highlight subject texture, clean composition, and visual atmosphere with a polished restrained finish.",
+      "cinematic": "Push the result further toward a cinematic short, with stronger shot layering, lighting atmosphere, depth, and emotional progression.",
+      "natural": "Make the subject or character movement feel more natural and coherent, avoiding stiffness, exaggeration, and abrupt transitions.",
+      "stable": "Use a steadier, more restrained camera style with less unnecessary shake and fewer abrupt cuts so the result feels more professional.",
+      "rhythm": "Make the pacing snappier and cleaner, with a stronger opening hook, clearer motion beats, and smoother transitions."
+    },
+    "options": {
+      "goals": {
+        "brand": "Theme expression",
+        "product": "Product showcase",
+        "portrait": "Portrait mood",
+        "story": "Story scene",
+        "travel": "Travel / landscape"
+      },
+      "styles": {
+        "cinematic": "Cinematic",
+        "premium": "Premium look",
+        "realistic": "Natural realism",
+        "dreamy": "Dreamy / gentle",
+        "social": "Short-form social"
+      },
+      "cameras": {
+        "static": "Locked-off shot",
+        "push": "Push-in shot",
+        "tracking": "Tracking shot",
+        "orbit": "Orbit reveal",
+        "aerial": "Aerial wide"
+      },
+      "paces": {
+        "gentle": "Gentle and detailed",
+        "steady": "Balanced pacing",
+        "brisk": "Fast and crisp"
+      },
+      "audios": {
+        "immersive": "Immersive ambience",
+        "narration": "Voice / narration focus",
+        "ambience": "Atmosphere first",
+        "silent": "Design as silent video"
+      }
+    }
+  },
+  "actions": {
+    "generate": "Start Creating",
+    "generating": "Creating...",
+    "clear": "Clear Form"
+  },
+  "cost": {
+    "label": "Local Task",
+    "value": "{local}",
+    "estimated": "Estimated Task",
+    "local": "local",
+    "insufficient": "Personal edition does not limit usage; check model and API key settings"
+  },
+  "success": {
+    "title": "Creation Task Submitted!",
+    "templateApplied": "Prompt Applied: {name}",
+    "message": "Your artwork is being generated, check task list for progress",
+    "viewTasks": "View Tasks"
+  },
+  "errors": {
+    "loadModels": "Failed to load models",
+    "noModels": "No models available",
+    "submit": "Creation failed, please try again",
+    "selectModel": "Please select an AI model",
+    "promptRequired": "Please enter a creation description",
+    "doubaoModesExclusive": "For Seedance 2.0, multimodal references and first/last frame inputs are mutually exclusive",
+    "doubaoAudioNeedsMedia": "Reference audio cannot be used alone; add at least one reference image or reference video",
+    "doubaoReferenceImageLimit": "You can upload up to 9 reference images",
+    "doubaoReferenceVideoLimit": "You can upload up to 3 reference videos",
+    "doubaoReferenceAudioLimit": "You can upload up to 3 reference audio clips",
+    "wanxReferenceRequired": "Wanx requires at least 1 reference image or reference video",
+    "wanxReferenceVisualLimit": "Wanx supports up to 5 reference images and reference videos in total",
+    "wanxReferenceAudioLimit": "The current Wanx model does not support reference audio, or the audio count exceeds the allowed limit",
+    "wanxAudioNeedsVisual": "Wanx reference audio cannot exceed the total number of reference images and reference videos, and cannot be used alone",
+    "wanxI2vRatioUnsupported": "Video continuation / last frame does not support aspect ratio",
+    "wanxI2vSingleFirstFrame": "Only 1 first frame is supported for this combination",
+    "wanxI2vSingleLastFrame": "Only 1 last frame is supported for this combination",
+    "wanxI2vSingleVideo": "Only 1 continuation video is supported for this combination",
+    "wanxContinuationVideoRequired": "Please upload a continuation video first",
+    "wanxSingleAudioOnly": "Only 1 audio file is supported for this combination",
+    "referenceLimitReached": "This model supports up to {max} reference asset(s)",
+    "referenceAssetsMutuallyExclusive": "You cannot select project reference assets while first/last frame input is enabled",
+    "promptTooShort": "Prompt must be at least 1 character",
+    "promptTooLong": "Prompt is too long. Please shorten it and try again"
+  },
+  "featuredTemplates": {
+    "quickStart": "Quick Start",
+    "allTemplates": "All Prompts →",
+    "savePreset": "Save as Preset",
+    "savePresetTitle": "Preset Name",
+    "savePresetPlaceholder": "Give this preset a name",
+    "savePresetSuccess": "Preset saved",
+    "savePresetFail": "Failed to save preset",
+    "myPresets": "My Presets",
+    "applyTemplate": "Create Similar",
+    "presetSaved": "Preset \"{name}\" saved",
+    "loginRequired": "Personal presets are saved locally",
+    "categoryAll": "All Categories",
+    "dragHint": "Drag sideways or use the arrows to explore more ideas.",
+    "loginToViewPresets": "Local presets are saved in this browser and can be applied here.",
+    "emptySystem": "No network prompts yet",
+    "emptySystemDesc": "There are no network prompts for this mode right now. Try another category or create from scratch.",
+    "emptyPresets": "No personal presets yet",
+    "emptyPresetsDesc": "Your saved image and video presets will appear here.",
+    "scrollPrev": "View previous idea",
+    "scrollNext": "View next idea",
+    "sources": {
+      "system": "Prompt source: https://github.com/glidea/banana-prompt-quicker",
+      "presets": "My Presets"
+    }
+  }
+}

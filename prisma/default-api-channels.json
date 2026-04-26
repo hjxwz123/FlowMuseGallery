@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "NanoBanana",
+    "provider": "nanobanana",
+    "timeout": 900000,
+    "maxRetry": 3,
+    "priority": 100
+  },
+  {
+    "id": 2,
+    "name": "Midjourney",
+    "provider": "mj",
+    "timeout": 900000,
+    "maxRetry": 3,
+    "priority": 100
+  },
+  {
+    "id": 3,
+    "name": "GPT Image",
+    "provider": "gptimage",
+    "timeout": 900000,
+    "maxRetry": 3,
+    "priority": 100
+  },
+  {
+    "id": 4,
+    "name": "火山豆包",
+    "provider": "doubao",
+    "timeout": 900000,
+    "maxRetry": 3,
+    "priority": 100
+  },
+  {
+    "id": 10,
+    "name": "通义千问",
+    "provider": "qwen",
+    "timeout": 900000,
+    "maxRetry": 3,
+    "priority": 100
+  },
+  {
+    "id": 11,
+    "name": "通义万象",
+    "provider": "wanx",
+    "timeout": 900000,
+    "maxRetry": 3,
+    "priority": 100
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "title": "Prompt Library",
+  "subtitle": "Explore creative prompts and inspire unlimited ideas",
+  "searchPlaceholder": "Search prompts...",
+  "refresh": "Refresh data",
+  "tabs": {
+    "all": "All",
+    "generate": "Generate",
+    "edit": "Edit"
+  },
+  "category": {
+    "all": "All Categories",
+    "有趣": "Fun",
+    "实用": "Practical",
+    "艺术": "Art",
+    "风格": "Style",
+    "其他": "Other"
+  },
+  "card": {
+    "author": "Author",
+    "mode": {
+      "generate": "Generate",
+      "edit": "Edit"
+    },
+    "viewDetail": "View Details",
+    "copyPrompt": "Copy Prompt",
+    "visitLink": "Visit Link"
+  },
+  "modal": {
+    "title": "Prompt Details",
+    "prompt": "Prompt",
+    "category": "Category",
+    "subCategory": "Sub Category",
+    "mode": {
+      "generate": "Generate",
+      "edit": "Edit"
+    },
+    "author": "Author",
+    "link": "Original Link",
+    "created": "Created",
+    "close": "Close",
+    "copyPrompt": "Copy Prompt",
+    "copied": "Copied",
+    "visitLink": "Visit Original"
+  },
+  "empty": {
+    "title": "No Prompts",
+    "description": "No prompts in this category yet"
+  },
+  "loading": "Loading...",
+  "loadMore": "Load More",
+  "noMore": "All prompts loaded",
+  "error": {
+    "load": "Failed to load, please try again"
+  }
+}
