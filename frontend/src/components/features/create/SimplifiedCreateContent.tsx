@@ -210,6 +210,7 @@ function resolveWanxModelName(model?: Pick<ModelWithCapabilities, 'modelKey' | '
 function resolveWanxGeneration(modelName?: string | null) {
   const normalized = String(modelName || '').trim().toLowerCase()
   if (normalized.startsWith('wan2.7')) return 'wan2.7'
+  if (normalized.startsWith('happyhorse-1.0')) return 'happyhorse-1.0'
   return null
 }
 
@@ -238,7 +239,7 @@ function buildCreateSelectableModels(
     const modelName = resolveWanxModelName(model)
     const generation = resolveWanxGeneration(modelName)
     const kind = resolveWanxModelKind(modelName)
-    if (generation !== 'wan2.7' || !kind) return
+    if (!generation || !kind) return
 
     const current = wanxCandidates.get(generation) ?? {}
     if (!current[kind]) {
@@ -294,13 +295,20 @@ function buildCreateSelectableModels(
 }
 
 function inferWanxMergedModelKind(input: {
+  generation?: string | null
   hasReferenceImages: boolean
   hasReferenceVideos: boolean
   hasFirstFrame: boolean
   hasLastFrame: boolean
   hasContinuation: boolean
 }): WanxModelKind {
+  const isHappyhorse = input.generation === 'happyhorse-1.0'
+
   if (input.hasLastFrame || input.hasContinuation) {
+    return 'i2v'
+  }
+
+  if (isHappyhorse && input.hasReferenceVideos) {
     return 'i2v'
   }
 
@@ -689,10 +697,29 @@ export function SimplifiedCreateContent() {
     [selectedModel]
   )
 
+  const wanxSelectedGeneration = useMemo(() => {
+    if (!isWanxVideo) return null
+    return selectedModel?.wanxMergedBundle?.generation ?? resolveWanxGeneration(resolveWanxModelName(selectedModel))
+  }, [isWanxVideo, selectedModel])
+
+  const isWanxHappyhorseVideo = useMemo(
+    () => wanxSelectedGeneration === 'happyhorse-1.0',
+    [wanxSelectedGeneration]
+  )
+
   const wanxBaseModelKind = useMemo(() => {
     if (!isWanxVideo || isWanxMergedVideo) return null
     return resolveWanxModelKind(resolveWanxModelName(selectedModel))
   }, [isWanxMergedVideo, isWanxVideo, selectedModel])
+
+  const wanxCanSelectVideoAssets = useMemo(() => {
+    if (!isWanxVideo) return false
+    if (wanxSelectedGeneration === 'wan2.7') return true
+    if (wanxSelectedGeneration === 'happyhorse-1.0') {
+      return isWanxMergedVideo || wanxBaseModelKind === 'i2v'
+    }
+    return false
+  }, [isWanxMergedVideo, isWanxVideo, wanxBaseModelKind, wanxSelectedGeneration])
 
   // 判断是否是 Midjourney（不需要额外参数）
   const isMidjourney = useMemo(() => {
@@ -712,11 +739,11 @@ export function SimplifiedCreateContent() {
     }
 
     if (isWanxVideo) {
-      return projectAssets.filter((asset) => asset.kind === 'image' || asset.kind === 'video')
+      return projectAssets.filter((asset) => asset.kind === 'image' || (wanxCanSelectVideoAssets && asset.kind === 'video'))
     }
 
     return projectAssets.filter((asset) => asset.kind === 'image')
-  }, [activeTab, isDoubaoSeedance20, isDoubaoVideo, isWanxVideo, projectAssets, selectedProject, supportsImageInput])
+  }, [activeTab, isDoubaoSeedance20, isDoubaoVideo, isWanxVideo, projectAssets, selectedProject, supportsImageInput, wanxCanSelectVideoAssets])
 
   const selectedProjectAssets = useMemo(() => {
     const usableAssetMap = new Map<string, ProjectAsset>(
@@ -773,6 +800,7 @@ export function SimplifiedCreateContent() {
     }
 
     return inferWanxMergedModelKind({
+      generation: wanxSelectedGeneration,
       hasReferenceImages: wanxHasReferenceImageInputs,
       hasReferenceVideos: wanxHasReferenceVideoInputs,
       hasFirstFrame: wanxFirstFrameImages.length > 0,
@@ -787,13 +815,35 @@ export function SimplifiedCreateContent() {
     wanxHasReferenceVideoInputs,
     wanxFirstFrameImages.length,
     wanxLastFrameImages.length,
+    wanxSelectedGeneration,
     wanxVideoContinuationEnabled,
   ])
 
   const wanxSupportsAudioInput = useMemo(
-    () => isWanx27Video,
-    [isWanx27Video]
+    () => isWanx27Video || (isWanxHappyhorseVideo && wanxResolvedModelKind === 't2v'),
+    [isWanx27Video, isWanxHappyhorseVideo, wanxResolvedModelKind]
   )
+
+  const wanxSupportsFirstFrameInput = useMemo(() => {
+    if (!isWanxVideo) return false
+    if (wanxSelectedGeneration === 'wan2.7') return supportsImageInput || isWanxMergedVideo
+    if (wanxSelectedGeneration === 'happyhorse-1.0') return isWanxMergedVideo || wanxResolvedModelKind === 'i2v'
+    return false
+  }, [isWanxMergedVideo, isWanxVideo, supportsImageInput, wanxResolvedModelKind, wanxSelectedGeneration])
+
+  const wanxSupportsLastFrameInput = useMemo(
+    () => isWanxVideo && wanxSelectedGeneration === 'wan2.7',
+    [isWanxVideo, wanxSelectedGeneration]
+  )
+
+  const wanxAllowsReferenceVideoInputs = useMemo(() => {
+    if (!isWanxVideo) return false
+    if (wanxSelectedGeneration === 'wan2.7') return true
+    if (wanxSelectedGeneration === 'happyhorse-1.0') {
+      return isWanxMergedVideo || wanxResolvedModelKind === 'i2v'
+    }
+    return false
+  }, [isWanxMergedVideo, isWanxVideo, wanxResolvedModelKind, wanxSelectedGeneration])
 
   const wanxCanCustomizeRatio = useMemo(
     () => isWanxVideo && wanxResolvedModelKind !== 'i2v' && wanxFirstFrameImages.length === 0,
@@ -847,15 +897,29 @@ export function SimplifiedCreateContent() {
   )
 
   const wanxReferenceVideoUploadMaxFiles = useMemo(
-    () => Math.max(0, 5 - wanxProjectReferenceVisualCount - wanxReferenceImages.length),
-    [wanxProjectReferenceVisualCount, wanxReferenceImages.length]
+    () => {
+      if (!wanxAllowsReferenceVideoInputs) return 0
+      if (isWanxHappyhorseVideo) {
+        return Math.max(0, 1 - selectedProjectVideoAssets.length)
+      }
+      return Math.max(0, 5 - wanxProjectReferenceVisualCount - wanxReferenceImages.length)
+    },
+    [
+      isWanxHappyhorseVideo,
+      selectedProjectVideoAssets.length,
+      wanxAllowsReferenceVideoInputs,
+      wanxProjectReferenceVisualCount,
+      wanxReferenceImages.length,
+    ]
   )
 
   const wanxVideoDurationOptions = useMemo(() => {
     if (!isWanxVideo) return null
-    const hasReferenceVideoForR2v = wanxResolvedModelKind === 'r2v' && wanxHasReferenceVideoInputs
-    return createWanxVideoDurationOptions(hasReferenceVideoForR2v)
-  }, [isWanxVideo, wanxHasReferenceVideoInputs, wanxResolvedModelKind])
+    return createWanxVideoDurationOptions({
+      hasReferenceVideo: wanxResolvedModelKind === 'r2v' && wanxHasReferenceVideoInputs,
+      generation: wanxSelectedGeneration,
+    })
+  }, [isWanxVideo, wanxHasReferenceVideoInputs, wanxResolvedModelKind, wanxSelectedGeneration])
 
   const hasDoubaoSeedance20ReferenceInputs = useMemo(
     () =>
@@ -902,6 +966,10 @@ export function SimplifiedCreateContent() {
     }
 
     if (isWanxVideo) {
+      if (asset.kind === 'video' && !wanxAllowsReferenceVideoInputs) {
+        return false
+      }
+
       if (wanxResolvedModelKind === 'i2v') {
         if (asset.kind === 'image') {
           return selectedProjectImageAssets.length < 1 && wanxReferenceImages.length === 0 && wanxFirstFrameImages.length === 0
@@ -910,6 +978,10 @@ export function SimplifiedCreateContent() {
           return selectedProjectVideoAssets.length < 1 && wanxReferenceVideos.length === 0
         }
         return false
+      }
+
+      if (isWanxHappyhorseVideo && asset.kind === 'video') {
+        return selectedProjectVideoAssets.length < 1 && wanxReferenceVideos.length === 0
       }
 
       if (asset.kind !== 'image' && asset.kind !== 'video') return false
@@ -944,7 +1016,9 @@ export function SimplifiedCreateContent() {
     isDoubaoVideo,
     isDoubaoSeedance20,
     isWanxVideo,
+    isWanxHappyhorseVideo,
     wanxResolvedModelKind,
+    wanxAllowsReferenceVideoInputs,
     maxInputImages,
     wanxReferenceImages.length,
     wanxReferenceVideos.length,
@@ -974,7 +1048,7 @@ export function SimplifiedCreateContent() {
               ? asset.kind === 'video' ? 3 : 9
               : 4
             : isWanxVideo
-              ? wanxResolvedModelKind === 'i2v' ? 1 : 5
+              ? wanxResolvedModelKind === 'i2v' || (isWanxHappyhorseVideo && asset.kind === 'video') ? 1 : 5
               : maxInputImages
 
       toast.error(t('errors.referenceLimitReached', { max }))
@@ -1024,9 +1098,9 @@ export function SimplifiedCreateContent() {
     if (isWanxVideo) {
       return assignMentionOrdinals([
         ...createUploadMentionableMediaItems(wanxReferenceImages, 'image'),
-        ...createUploadMentionableMediaItems(wanxReferenceVideos, 'video'),
+        ...(wanxAllowsReferenceVideoInputs ? createUploadMentionableMediaItems(wanxReferenceVideos, 'video') : []),
         ...createProjectMentionableMediaItems(
-          selectedProjectAssets.filter((asset) => asset.kind === 'image' || asset.kind === 'video')
+          selectedProjectAssets.filter((asset) => asset.kind === 'image' || (wanxAllowsReferenceVideoInputs && asset.kind === 'video'))
         ),
       ])
     }
@@ -1050,6 +1124,7 @@ export function SimplifiedCreateContent() {
     isDoubaoVideo,
     isDoubaoSeedance20,
     isWanxVideo,
+    wanxAllowsReferenceVideoInputs,
     supportsImageInput,
   ])
 
@@ -1102,6 +1177,9 @@ export function SimplifiedCreateContent() {
     setWanxReferenceVideos((prev) => (
       prev.length > wanxReferenceVideoUploadMaxFiles ? prev.slice(0, wanxReferenceVideoUploadMaxFiles) : prev
     ))
+    if (!wanxAllowsReferenceVideoInputs) {
+      setWanxReferenceVideos([])
+    }
     setWanxReferenceAudios((prev) => {
       if (!wanxSupportsAudioInput) return []
       return prev.length > wanxReferenceAudioUploadMaxFiles
@@ -1109,20 +1187,25 @@ export function SimplifiedCreateContent() {
         : prev
     })
     setWanxFirstFrameImages((prev) => {
-      if (!isWanx27Video) return []
+      if (!wanxSupportsFirstFrameInput) return []
       return prev.slice(0, 1)
     })
     setWanxLastFrameImages((prev) => {
-      if (!isWanx27Video) return []
+      if (!wanxSupportsLastFrameInput) return []
       return prev.slice(0, 1)
     })
+    if (!wanxSupportsLastFrameInput) {
+      setWanxVideoContinuationEnabled(false)
+    }
   }, [
-    isWanx27Video,
     isWanxVideo,
     selectedModelId,
+    wanxAllowsReferenceVideoInputs,
     wanxReferenceAudioUploadMaxFiles,
     wanxReferenceImageUploadMaxFiles,
     wanxReferenceVideoUploadMaxFiles,
+    wanxSupportsFirstFrameInput,
+    wanxSupportsLastFrameInput,
     wanxSupportsAudioInput,
   ])
 
@@ -1180,6 +1263,8 @@ export function SimplifiedCreateContent() {
         }
 
         if (isWanxVideo) {
+          if (asset.kind === 'video' && !wanxAllowsReferenceVideoInputs) continue
+
           if (wanxResolvedModelKind === 'i2v') {
             if (asset.kind === 'image') {
               if (keptImageCount >= 1 || wanxReferenceImages.length > 0 || wanxFirstFrameImages.length > 0) continue
@@ -1192,6 +1277,13 @@ export function SimplifiedCreateContent() {
               keptVideoCount += 1
               next.push(assetId)
             }
+            continue
+          }
+
+          if (isWanxHappyhorseVideo && asset.kind === 'video') {
+            if (keptVideoCount >= 1 || wanxReferenceVideos.length > 0) continue
+            keptVideoCount += 1
+            next.push(assetId)
             continue
           }
 
@@ -1229,7 +1321,9 @@ export function SimplifiedCreateContent() {
     isDoubaoVideo,
     isDoubaoSeedance20,
     isWanxVideo,
+    isWanxHappyhorseVideo,
     wanxResolvedModelKind,
+    wanxAllowsReferenceVideoInputs,
     wanxReferenceImages.length,
     wanxReferenceVideos.length,
     wanxFirstFrameImages.length,
@@ -1413,13 +1507,13 @@ export function SimplifiedCreateContent() {
     if (wanxVideoDurationOptions.some((option) => option.value === videoDuration)) return
 
     const fallbackDuration =
-      wanxVideoDurationOptions.find((option) => option.value === (wanxResolvedModelKind === 'r2v' && wanxHasReferenceVideoInputs ? '10' : '5')) ??
+      wanxVideoDurationOptions.find((option) => option.value === '5') ??
       wanxVideoDurationOptions[0]
 
     if (fallbackDuration) {
       setVideoDuration(fallbackDuration.value)
     }
-  }, [isWanxVideo, videoDuration, wanxHasReferenceVideoInputs, wanxResolvedModelKind, wanxVideoDurationOptions])
+  }, [isWanxVideo, videoDuration, wanxVideoDurationOptions])
 
   // 文件转 base64 工具函数
   const toBase64 = (file: File): Promise<string> => {
@@ -1825,6 +1919,21 @@ export function SimplifiedCreateContent() {
     }
 
     if (activeTab === 'video' && isWanxVideo) {
+      if (isWanxHappyhorseVideo && wanxResolvedModelKind !== 't2v' && totalWanxAudioCount > 0) {
+        toast.error(t('errors.wanxReferenceAudioLimit'))
+        return
+      }
+
+      if (isWanxHappyhorseVideo && totalWanxLastFrameCount > 0) {
+        toast.error(t('errors.wanxLastFrameUnsupported'))
+        return
+      }
+
+      if (isWanxHappyhorseVideo && wanxResolvedModelKind === 'r2v' && totalWanxReferenceVideoCount > 0) {
+        toast.error(t('errors.wanxReferenceVideoUnsupported'))
+        return
+      }
+
       if (wanxResolvedModelKind === 'r2v') {
         if (totalWanxReferenceVisualCount < 1) {
           toast.error(t('errors.wanxReferenceRequired'))
@@ -2070,10 +2179,18 @@ export function SimplifiedCreateContent() {
             uploadedLastFrameUrls,
           ] = await Promise.all([
             uploadReferenceInputs('image', wanxReferenceImages, 'wanx'),
-            uploadReferenceInputs('video', wanxReferenceVideos, 'wanx'),
-            uploadReferenceInputs('audio', wanxReferenceAudios, 'wanx'),
-            uploadReferenceInputs('image', wanxFirstFrameImages, 'wanx'),
-            uploadReferenceInputs('image', wanxLastFrameImages, 'wanx'),
+            wanxAllowsReferenceVideoInputs
+              ? uploadReferenceInputs('video', wanxReferenceVideos, 'wanx')
+              : Promise.resolve([]),
+            wanxSupportsAudioInput
+              ? uploadReferenceInputs('audio', wanxReferenceAudios, 'wanx')
+              : Promise.resolve([]),
+            wanxSupportsFirstFrameInput
+              ? uploadReferenceInputs('image', wanxFirstFrameImages, 'wanx')
+              : Promise.resolve([]),
+            wanxSupportsLastFrameInput
+              ? uploadReferenceInputs('image', wanxLastFrameImages, 'wanx')
+              : Promise.resolve([]),
           ])
 
           const referenceImageUrls = [...uploadedReferenceImageUrls, ...selectedProjectImageAssets.map((asset) => asset.url)]
@@ -2082,7 +2199,7 @@ export function SimplifiedCreateContent() {
           const explicitLastFrameUrl = uploadedLastFrameUrls[0]
 
           if (wanxResolvedModelKind === 't2v') {
-            if (uploadedReferenceAudioUrls[0]) {
+            if (wanxSupportsAudioInput && uploadedReferenceAudioUrls[0]) {
               parameters.audioUrl = uploadedReferenceAudioUrls[0]
             }
           } else if (wanxResolvedModelKind === 'i2v') {
@@ -2094,23 +2211,23 @@ export function SimplifiedCreateContent() {
             if (referenceVideoUrls[0]) {
               parameters.firstClip = referenceVideoUrls[0]
             }
-            if (explicitLastFrameUrl) {
+            if (wanxSupportsLastFrameInput && explicitLastFrameUrl) {
               parameters.lastFrame = explicitLastFrameUrl
             }
-            if (uploadedReferenceAudioUrls[0]) {
+            if (wanxSupportsAudioInput && uploadedReferenceAudioUrls[0]) {
               parameters.drivingAudio = uploadedReferenceAudioUrls[0]
             }
           } else {
             if (referenceImageUrls.length > 0) {
               parameters.referenceImages = referenceImageUrls
             }
-            if (referenceVideoUrls.length > 0) {
+            if (!isWanxHappyhorseVideo && referenceVideoUrls.length > 0) {
               parameters.referenceVideos = referenceVideoUrls
             }
-            if (uploadedReferenceAudioUrls.length > 0) {
+            if (wanxSupportsAudioInput && uploadedReferenceAudioUrls.length > 0) {
               parameters.referenceAudios = uploadedReferenceAudioUrls
             }
-            if (explicitFirstFrameUrl) {
+            if (!isWanxHappyhorseVideo && explicitFirstFrameUrl) {
               parameters.firstFrame = explicitFirstFrameUrl
             }
           }
@@ -2678,6 +2795,10 @@ export function SimplifiedCreateContent() {
                 isWanx27Video={isWanx27Video}
                 wanxResolvedModelKind={wanxResolvedModelKind}
                 wanxSupportsAudioInput={wanxSupportsAudioInput}
+                wanxAllowsReferenceVideoInputs={wanxAllowsReferenceVideoInputs}
+                wanxSupportsFirstFrameInput={wanxSupportsFirstFrameInput}
+                wanxSupportsLastFrameInput={wanxSupportsLastFrameInput}
+                wanxReferenceVideosAreContinuationOnly={isWanxHappyhorseVideo}
                 wanxCanCustomizeRatio={wanxCanCustomizeRatio}
                 wanxHasReferenceVideoInputs={wanxHasReferenceVideoInputs}
                 wanxVideoContinuationEnabled={wanxVideoContinuationEnabled}

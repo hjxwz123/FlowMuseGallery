@@ -13,7 +13,7 @@ type WanxI2vMediaType = 'first_frame' | 'last_frame' | 'driving_audio' | 'first_
 type WanxR2vMediaType = 'reference_image' | 'reference_video' | 'first_frame';
 type WanxMediaType = WanxI2vMediaType | WanxR2vMediaType;
 type WanxModelKind = 't2v' | 'i2v' | 'r2v' | 'unknown';
-type WanxGeneration = 'wan2.7' | 'wan2.6' | 'unknown';
+type WanxGeneration = 'wan2.7' | 'happyhorse-1.0' | 'wan2.6' | 'unknown';
 
 type WanxMediaItem = {
   type: WanxMediaType;
@@ -139,8 +139,51 @@ function resolveWanxModel(params: Record<string, unknown>) {
 function resolveWanxGeneration(model: string | undefined): WanxGeneration {
   const normalized = (model ?? '').toLowerCase();
   if (normalized.startsWith('wan2.7')) return 'wan2.7';
+  if (normalized.startsWith('happyhorse-1.0')) return 'happyhorse-1.0';
   if (normalized.startsWith('wan2.6')) return 'wan2.6';
   return 'unknown';
+}
+
+function isSupportedWanxGeneration(generation: WanxGeneration) {
+  return generation === 'wan2.7' || generation === 'happyhorse-1.0';
+}
+
+function isHappyhorseGeneration(generation: WanxGeneration) {
+  return generation === 'happyhorse-1.0';
+}
+
+function getWanxDurationRange(generation: WanxGeneration) {
+  return isHappyhorseGeneration(generation)
+    ? { min: 3, max: 15 }
+    : { min: 2, max: 15 };
+}
+
+function supportsPromptExtend(generation: WanxGeneration) {
+  return generation === 'wan2.7';
+}
+
+function supportsT2vAudioInput(generation: WanxGeneration) {
+  return generation === 'wan2.7' || generation === 'happyhorse-1.0';
+}
+
+function supportsI2vLastFrame(generation: WanxGeneration) {
+  return generation === 'wan2.7';
+}
+
+function supportsI2vDrivingAudio(generation: WanxGeneration) {
+  return generation === 'wan2.7';
+}
+
+function supportsR2vVideoReferences(generation: WanxGeneration) {
+  return generation === 'wan2.7';
+}
+
+function supportsR2vAudioReferences(generation: WanxGeneration) {
+  return generation === 'wan2.7';
+}
+
+function supportsR2vFirstFrame(generation: WanxGeneration) {
+  return generation === 'wan2.7';
 }
 
 function resolveWanxModelKind(model: string | undefined): WanxModelKind {
@@ -172,13 +215,18 @@ function getWatermarkValue(params: Record<string, unknown>): boolean | undefined
 function parseWanxDirectMedia(
   params: Record<string, unknown>,
   kind: WanxModelKind,
+  generation: WanxGeneration,
 ): WanxStructuredMediaResult | null {
   if (!Array.isArray(params.media)) return null;
 
   const allowedMediaTypes: Record<WanxModelKind, WanxMediaType[]> = {
     t2v: [],
-    i2v: ['first_frame', 'last_frame', 'driving_audio', 'first_clip'],
-    r2v: ['reference_image', 'reference_video', 'first_frame'],
+    i2v: isHappyhorseGeneration(generation)
+      ? ['first_frame', 'first_clip']
+      : ['first_frame', 'last_frame', 'driving_audio', 'first_clip'],
+    r2v: isHappyhorseGeneration(generation)
+      ? ['reference_image']
+      : ['reference_image', 'reference_video', 'first_frame'],
     unknown: [],
   };
 
@@ -244,16 +292,22 @@ function getSingleWanxField(
   return result.items[0];
 }
 
-function buildWanxT2vInput(params: Record<string, unknown>): WanxStructuredMediaResult {
+function buildWanxT2vInput(params: Record<string, unknown>, generation: WanxGeneration): WanxStructuredMediaResult {
   const errors: string[] = [];
-  const directMedia = parseWanxDirectMedia(params, 't2v');
+  const directMedia = parseWanxDirectMedia(params, 't2v', generation);
   if (directMedia) {
     if (directMedia.media.length > 0) {
       errors.push('wan t2v does not support media input');
     }
+    const audioUrl =
+      getSingleWanxField(params, ['audioUrl', 'audio_url'], 'audioUrl', errors) ??
+      parseStringList(params.referenceAudios ?? params.reference_audios ?? params.referenceAudio ?? params.reference_audio).items[0];
+    if (audioUrl && !supportsT2vAudioInput(generation)) {
+      errors.push('wan t2v does not support audioUrl');
+    }
     return {
       media: [],
-      audioUrl: getSingleWanxField(params, ['audioUrl', 'audio_url'], 'audioUrl', errors),
+      audioUrl: supportsT2vAudioInput(generation) ? audioUrl : undefined,
       errors: [...errors, ...directMedia.errors],
     };
   }
@@ -262,11 +316,19 @@ function buildWanxT2vInput(params: Record<string, unknown>): WanxStructuredMedia
     getSingleWanxField(params, ['audioUrl', 'audio_url'], 'audioUrl', errors) ??
     parseStringList(params.referenceAudios ?? params.reference_audios ?? params.referenceAudio ?? params.reference_audio).items[0];
 
-  return { media: [], audioUrl, errors };
+  if (audioUrl && !supportsT2vAudioInput(generation)) {
+    errors.push('wan t2v does not support audioUrl');
+  }
+
+  return {
+    media: [],
+    audioUrl: supportsT2vAudioInput(generation) ? audioUrl : undefined,
+    errors,
+  };
 }
 
-function buildWanxI2vInput(params: Record<string, unknown>): WanxStructuredMediaResult {
-  const directMedia = parseWanxDirectMedia(params, 'i2v');
+function buildWanxI2vInput(params: Record<string, unknown>, generation: WanxGeneration): WanxStructuredMediaResult {
+  const directMedia = parseWanxDirectMedia(params, 'i2v', generation);
   if (directMedia) return directMedia;
 
   const errors: string[] = [];
@@ -296,15 +358,27 @@ function buildWanxI2vInput(params: Record<string, unknown>): WanxStructuredMedia
     parseStringList(params.referenceAudios ?? params.reference_audios ?? params.referenceAudio ?? params.reference_audio).items[0];
 
   if (firstFrame) media.push({ type: 'first_frame', url: firstFrame });
-  if (lastFrame) media.push({ type: 'last_frame', url: lastFrame });
+  if (lastFrame) {
+    if (supportsI2vLastFrame(generation)) {
+      media.push({ type: 'last_frame', url: lastFrame });
+    } else {
+      errors.push('happyhorse-1.0 i2v does not support lastFrame');
+    }
+  }
   if (firstClip) media.push({ type: 'first_clip', url: firstClip });
-  if (drivingAudio) media.push({ type: 'driving_audio', url: drivingAudio });
+  if (drivingAudio) {
+    if (supportsI2vDrivingAudio(generation)) {
+      media.push({ type: 'driving_audio', url: drivingAudio });
+    } else {
+      errors.push('happyhorse-1.0 i2v does not support drivingAudio');
+    }
+  }
 
   return { media, errors };
 }
 
-function buildWanxR2vInput(params: Record<string, unknown>): WanxStructuredMediaResult {
-  const directMedia = parseWanxDirectMedia(params, 'r2v');
+function buildWanxR2vInput(params: Record<string, unknown>, generation: WanxGeneration): WanxStructuredMediaResult {
+  const directMedia = parseWanxDirectMedia(params, 'r2v', generation);
   if (directMedia) return directMedia;
 
   const errors: string[] = [];
@@ -332,29 +406,50 @@ function buildWanxR2vInput(params: Record<string, unknown>): WanxStructuredMedia
   }
 
   for (const url of referenceVideos.items) {
-    const item: WanxMediaItem = { type: 'reference_video', url };
-    media.push(item);
-    visualMedia.push(item);
+    if (supportsR2vVideoReferences(generation)) {
+      const item: WanxMediaItem = { type: 'reference_video', url };
+      media.push(item);
+      visualMedia.push(item);
+    }
   }
 
-  referenceAudios.items.forEach((url, index) => {
-    if (visualMedia[index]) {
-      visualMedia[index].reference_voice = url;
-    }
-  });
+  if (supportsR2vAudioReferences(generation)) {
+    referenceAudios.items.forEach((url, index) => {
+      if (visualMedia[index]) {
+        visualMedia[index].reference_voice = url;
+      }
+    });
+  }
 
-  if (firstFrame) {
+  if (firstFrame && supportsR2vFirstFrame(generation)) {
     media.push({ type: 'first_frame', url: firstFrame });
   }
 
-  if (referenceAudios.items.length > visualMedia.length) {
+  if (!supportsR2vVideoReferences(generation) && referenceVideos.items.length > 0) {
+    errors.push('happyhorse-1.0 r2v only supports image references');
+  }
+
+  if (!supportsR2vAudioReferences(generation) && referenceAudios.items.length > 0) {
+    errors.push('happyhorse-1.0 r2v does not support referenceAudios');
+  }
+
+  if (firstFrame && !supportsR2vFirstFrame(generation)) {
+    errors.push('happyhorse-1.0 r2v does not support firstFrame');
+  }
+
+  if (supportsR2vAudioReferences(generation) && referenceAudios.items.length > visualMedia.length) {
     errors.push('referenceAudios cannot exceed the number of reference images/videos');
   }
 
   return { media, errors };
 }
 
-function validateCommonWanx27Params(params: Record<string, unknown>, errors: string[]) {
+function validateCommonWanxParams(
+  params: Record<string, unknown>,
+  generation: WanxGeneration,
+  kind: WanxModelKind,
+  errors: string[],
+) {
   const prompt = asString(params.prompt);
   const negativePrompt = asString(params.negativePrompt ?? params.negative_prompt);
 
@@ -373,16 +468,36 @@ function validateCommonWanx27Params(params: Record<string, unknown>, errors: str
 
   const duration = asNumber(params.duration);
   if (duration !== undefined) {
+    const durationRange = getWanxDurationRange(generation);
     if (!Number.isInteger(duration)) {
       errors.push('duration must be an integer');
-    } else if (duration < 2 || duration > 15) {
-      errors.push('duration must be an integer between 2 and 15 seconds');
+    } else if (duration < durationRange.min || duration > durationRange.max) {
+      errors.push(`duration must be an integer between ${durationRange.min} and ${durationRange.max} seconds`);
     }
   }
 
   const promptExtend = getPromptExtendValue(params);
-  if ((isProvided(params.prompt_extend) || isProvided(params.promptExtend)) && promptExtend === undefined) {
-    errors.push('prompt_extend must be boolean');
+  if (isProvided(params.prompt_extend) || isProvided(params.promptExtend)) {
+    if (!supportsPromptExtend(generation)) {
+      errors.push('happyhorse-1.0 does not support prompt_extend');
+    } else if (promptExtend === undefined) {
+      errors.push('prompt_extend must be boolean');
+    }
+  }
+
+  if (isHappyhorseGeneration(generation) && kind !== 'i2v') {
+    if (
+      isProvided(params.lastFrame) ||
+      isProvided(params.last_frame) ||
+      isProvided(params.lastFrameImage) ||
+      isProvided(params.last_frame_image)
+    ) {
+      errors.push('happyhorse-1.0 does not support lastFrame');
+    }
+
+    if (isProvided(params.drivingAudio) || isProvided(params.driving_audio)) {
+      errors.push('happyhorse-1.0 does not support drivingAudio');
+    }
   }
 
   const watermark = getWatermarkValue(params);
@@ -396,9 +511,13 @@ function validateCommonWanx27Params(params: Record<string, unknown>, errors: str
   }
 }
 
-function buildWanx27Body(params: Record<string, unknown>, kind: WanxModelKind) {
+function buildWanxBody(
+  params: Record<string, unknown>,
+  kind: WanxModelKind,
+  generation: WanxGeneration,
+) {
   if (kind === 't2v') {
-    const prepared = buildWanxT2vInput(params);
+    const prepared = buildWanxT2vInput(params, generation);
     const body: Record<string, unknown> = {
       model: resolveWanxModel(params),
       input: {},
@@ -423,8 +542,10 @@ function buildWanx27Body(params: Record<string, unknown>, kind: WanxModelKind) {
     const duration = asNumber(params.duration);
     if (duration !== undefined) parameters.duration = duration;
 
-    const promptExtend = getPromptExtendValue(params);
-    if (promptExtend !== undefined) parameters.prompt_extend = promptExtend;
+    if (supportsPromptExtend(generation)) {
+      const promptExtend = getPromptExtendValue(params);
+      if (promptExtend !== undefined) parameters.prompt_extend = promptExtend;
+    }
 
     const watermark = getWatermarkValue(params);
     if (watermark !== undefined) parameters.watermark = watermark;
@@ -437,7 +558,7 @@ function buildWanx27Body(params: Record<string, unknown>, kind: WanxModelKind) {
   }
 
   if (kind === 'i2v') {
-    const prepared = buildWanxI2vInput(params);
+    const prepared = buildWanxI2vInput(params, generation);
     const body: Record<string, unknown> = {
       model: resolveWanxModel(params),
       input: {
@@ -459,8 +580,10 @@ function buildWanx27Body(params: Record<string, unknown>, kind: WanxModelKind) {
     const duration = asNumber(params.duration);
     if (duration !== undefined) parameters.duration = duration;
 
-    const promptExtend = getPromptExtendValue(params);
-    if (promptExtend !== undefined) parameters.prompt_extend = promptExtend;
+    if (supportsPromptExtend(generation)) {
+      const promptExtend = getPromptExtendValue(params);
+      if (promptExtend !== undefined) parameters.prompt_extend = promptExtend;
+    }
 
     const watermark = getWatermarkValue(params);
     if (watermark !== undefined) parameters.watermark = watermark;
@@ -472,7 +595,7 @@ function buildWanx27Body(params: Record<string, unknown>, kind: WanxModelKind) {
     return body;
   }
 
-  const prepared = buildWanxR2vInput(params);
+  const prepared = buildWanxR2vInput(params, generation);
   const body: Record<string, unknown> = {
     model: resolveWanxModel(params),
     input: {
@@ -496,8 +619,10 @@ function buildWanx27Body(params: Record<string, unknown>, kind: WanxModelKind) {
   const duration = asNumber(params.duration);
   if (duration !== undefined) parameters.duration = duration;
 
-  const promptExtend = getPromptExtendValue(params);
-  if (promptExtend !== undefined) parameters.prompt_extend = promptExtend;
+  if (supportsPromptExtend(generation)) {
+    const promptExtend = getPromptExtendValue(params);
+    if (promptExtend !== undefined) parameters.prompt_extend = promptExtend;
+  }
 
   const watermark = getWatermarkValue(params);
   if (watermark !== undefined) parameters.watermark = watermark;
@@ -620,8 +745,8 @@ export class WanxVideoAdapter extends BaseVideoAdapter {
 
     if (!model) errors.push('model is required (model/wanxModel/remoteModel)');
 
-    if (generation !== 'wan2.7') {
-      errors.push('wan adapter only supports wan2.7 models');
+    if (!isSupportedWanxGeneration(generation)) {
+      errors.push('wan adapter only supports wan2.7 and happyhorse-1.0 models');
       return { valid: false, errors };
     }
 
@@ -630,7 +755,7 @@ export class WanxVideoAdapter extends BaseVideoAdapter {
       return { valid: false, errors };
     }
 
-    validateCommonWanx27Params(raw, errors);
+    validateCommonWanxParams(raw, generation, kind, errors);
 
     if (kind === 't2v') {
       if (!prompt) errors.push('prompt is required');
@@ -640,13 +765,13 @@ export class WanxVideoAdapter extends BaseVideoAdapter {
         errors.push('ratio must be 16:9, 9:16, 1:1, 4:3, or 3:4');
       }
 
-      const prepared = buildWanxT2vInput(raw);
+      const prepared = buildWanxT2vInput(raw, generation);
       errors.push(...prepared.errors);
       return { valid: errors.length === 0, errors };
     }
 
     if (kind === 'i2v') {
-      const prepared = buildWanxI2vInput(raw);
+      const prepared = buildWanxI2vInput(raw, generation);
       errors.push(...prepared.errors);
 
       if (prepared.media.length < 1) {
@@ -663,7 +788,7 @@ export class WanxVideoAdapter extends BaseVideoAdapter {
 
     if (!prompt) errors.push('prompt is required');
 
-    const prepared = buildWanxR2vInput(raw);
+    const prepared = buildWanxR2vInput(raw, generation);
     errors.push(...prepared.errors);
 
     const ratio = asString(raw.ratio);
@@ -672,8 +797,8 @@ export class WanxVideoAdapter extends BaseVideoAdapter {
     }
 
     const referenceImageCount = prepared.media.filter((item) => item.type === 'reference_image').length;
-    const referenceVideoCount = prepared.media.filter((item) => item.type === 'reference_video').length;
     const firstFrameCount = prepared.media.filter((item) => item.type === 'first_frame').length;
+    const referenceVideoCount = prepared.media.filter((item) => item.type === 'reference_video').length;
     const visualCount = referenceImageCount + referenceVideoCount;
     const totalVisualCount = visualCount + firstFrameCount;
 
@@ -689,16 +814,6 @@ export class WanxVideoAdapter extends BaseVideoAdapter {
       errors.push('first_frame supports at most 1 image');
     }
 
-    if (isProvided(raw.duration)) {
-      const duration = asNumber(raw.duration);
-      if (duration !== undefined && Number.isInteger(duration)) {
-        const max = referenceVideoCount > 0 ? 10 : 15;
-        if (duration < 2 || duration > max) {
-          errors.push(`duration must be an integer between 2 and ${max} seconds`);
-        }
-      }
-    }
-
     return { valid: errors.length === 0, errors };
   }
 
@@ -708,7 +823,7 @@ export class WanxVideoAdapter extends BaseVideoAdapter {
     const generation = resolveWanxGeneration(model);
     const kind = resolveWanxModelKind(model);
 
-    if (generation !== 'wan2.7' || kind === 'unknown') {
+    if (!isSupportedWanxGeneration(generation) || kind === 'unknown') {
       return {
         model,
         input: {
@@ -717,6 +832,6 @@ export class WanxVideoAdapter extends BaseVideoAdapter {
       };
     }
 
-    return buildWanx27Body(raw, kind);
+    return buildWanxBody(raw, kind, generation);
   }
 }

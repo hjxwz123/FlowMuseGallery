@@ -62,7 +62,7 @@ export function isWanxR2vChatAgentVideoModel(model: ModelWithCapabilities | null
   const remoteModel = String(model.capabilities?.remoteModel ?? model.modelKey ?? '').trim().toLowerCase()
   return (
     provider.includes('wanx') &&
-    remoteModel.includes('wan2.7') &&
+    (remoteModel.includes('wan2.7') || remoteModel.includes('happyhorse-1.0')) &&
     remoteModel.includes('-r2v')
   )
 }
@@ -177,7 +177,14 @@ export function getChatAgentVideoDurationOptions(
 
   const provider = normalizeProviderFamily(model.provider)
   if (provider.includes('wanx')) {
-    return createWanxVideoDurationOptions(options?.hasReferenceVideo === true)
+    const remoteModel = String(model.capabilities?.remoteModel ?? model.modelKey ?? '').trim().toLowerCase()
+    const generation = remoteModel.startsWith('happyhorse-1.0')
+      ? 'happyhorse-1.0'
+      : remoteModel.startsWith('wan2.7') ? 'wan2.7' : null
+    return createWanxVideoDurationOptions({
+      hasReferenceVideo: options?.hasReferenceVideo === true,
+      generation,
+    })
   }
   if (provider.includes('doubao') || provider.includes('bytedance') || provider.includes('ark')) {
     return getDoubaoVideoDurationOptions(model.provider, model.capabilities?.remoteModel)

@@ -382,6 +382,8 @@
     "wanxReferenceRequired": "Wanx requires at least 1 reference image or reference video",
     "wanxReferenceVisualLimit": "Wanx supports up to 5 reference images and reference videos in total",
     "wanxReferenceAudioLimit": "The current Wanx model does not support reference audio, or the audio count exceeds the allowed limit",
+    "wanxReferenceVideoUnsupported": "HappyHorse 1.0 reference-to-video only supports image references",
+    "wanxLastFrameUnsupported": "The current model does not support last frame input",
     "wanxAudioNeedsVisual": "Wanx reference audio cannot exceed the total number of reference images and reference videos, and cannot be used alone",
     "wanxI2vRatioUnsupported": "Video continuation / last frame does not support aspect ratio",
     "wanxI2vSingleFirstFrame": "Only 1 first frame is supported for this combination",

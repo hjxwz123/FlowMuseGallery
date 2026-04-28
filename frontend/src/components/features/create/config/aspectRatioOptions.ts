@@ -724,15 +724,22 @@ export const WANX_VIDEO_RATIO_OPTIONS: AspectRatioOption[] = [
   },
 ]
 
-export function createWanxVideoDurationOptions(hasReferenceVideo: boolean): AspectRatioOption[] {
-  const max = hasReferenceVideo ? 10 : 15
+export function createWanxVideoDurationOptions(
+  input: boolean | { hasReferenceVideo?: boolean; generation?: string | null } = false
+): AspectRatioOption[] {
+  const hasReferenceVideo = typeof input === 'boolean' ? input : input.hasReferenceVideo === true
+  const generation = typeof input === 'boolean' ? null : input.generation
+  const min = generation === 'happyhorse-1.0' ? 3 : 2
+  const max = 15
 
-  return Array.from({ length: max - 1 }, (_, index) => {
-    const seconds = index + 2
+  return Array.from({ length: max - min + 1 }, (_, index) => {
+    const seconds = index + min
     return {
       value: String(seconds),
       label: `${seconds}秒`,
-      description: hasReferenceVideo ? '包含参考视频' : '仅图片/首帧参考',
+      description: generation === 'happyhorse-1.0'
+        ? 'HappyHorse 支持时长'
+        : hasReferenceVideo ? '包含参考视频' : '视频生成时长',
       icon: Clock,
     }
   })

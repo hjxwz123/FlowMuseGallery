@@ -382,6 +382,8 @@
     "wanxReferenceRequired": "万相至少需要 1 个参考图片或参考视频",
     "wanxReferenceVisualLimit": "万相的参考图片与参考视频总数最多为 5 个",
     "wanxReferenceAudioLimit": "当前万相模型不支持参考音频，或参考音频数量超出限制",
+    "wanxReferenceVideoUnsupported": "当前 HappyHorse 1.0 参考生视频仅支持图片参考",
+    "wanxLastFrameUnsupported": "当前模型不支持尾帧参数",
     "wanxAudioNeedsVisual": "万相参考音频不能超过参考图片与参考视频总数，且不能单独使用",
     "wanxI2vRatioUnsupported": "视频续写/尾帧不支持比例参数",
     "wanxI2vSingleFirstFrame": "当前组合最多 1 张首帧图",

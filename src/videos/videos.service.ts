@@ -270,6 +270,8 @@ export class VideosService {
       },
     });
 
+    const compatibleModelCache = new Map<string, boolean>();
+
     for (const row of rows) {
       const rowProviderData = parseSqliteJson<Record<string, unknown>>(row.providerData);
       if (!rowProviderData || typeof rowProviderData !== 'object' || Array.isArray(rowProviderData)) continue;
@@ -277,7 +279,14 @@ export class VideosService {
       const metadata = extractAutoProjectAgentFromProviderData(rowProviderData);
       if (!metadata?.workflow) continue;
       if (metadata.projectId !== task.projectId.toString()) continue;
-      if (metadata.videoModelId !== task.modelId.toString()) continue;
+      if (metadata.videoModelId !== task.modelId.toString()) {
+        let isCompatibleModel = compatibleModelCache.get(metadata.videoModelId);
+        if (isCompatibleModel === undefined) {
+          isCompatibleModel = await this.isSameWanxVideoModelSeries(metadata.videoModelId, task.modelId);
+          compatibleModelCache.set(metadata.videoModelId, isCompatibleModel);
+        }
+        if (!isCompatibleModel) continue;
+      }
       if (!metadata.workflow.generatedShotIds.includes(shotId)) continue;
 
       const nextGeneratedShotIds = metadata.workflow.generatedShotIds.filter((id) => id !== shotId);
@@ -308,6 +317,43 @@ export class VideosService {
         },
       });
     }
+  }
+
+  private async isSameWanxVideoModelSeries(leftModelIdRaw: string, rightModelId: bigint) {
+    let leftModelId: bigint;
+    try {
+      leftModelId = BigInt(leftModelIdRaw);
+    } catch {
+      return false;
+    }
+
+    const models = await this.prisma.aiModel.findMany({
+      where: {
+        id: { in: [leftModelId, rightModelId] },
+        type: AiModelType.video,
+      },
+      select: {
+        id: true,
+        provider: true,
+        modelKey: true,
+      },
+    });
+    const leftModel = models.find((model) => model.id === leftModelId);
+    const rightModel = models.find((model) => model.id === rightModelId);
+    if (!leftModel || !rightModel) return false;
+
+    const leftSeries = this.resolveWanxVideoModelSeries(leftModel);
+    const rightSeries = this.resolveWanxVideoModelSeries(rightModel);
+    return Boolean(leftSeries && rightSeries && leftSeries === rightSeries);
+  }
+
+  private resolveWanxVideoModelSeries(model: { provider: string; modelKey: string | null }) {
+    const provider = String(model.provider ?? '').trim().toLowerCase();
+    if (!provider.includes('wanx') && !provider.includes('wanxiang')) return null;
+
+    const remoteModel = String(model.modelKey ?? '').trim().toLowerCase();
+    const match = remoteModel.match(/^(wan2\.7|happyhorse-1\.0)-(?:i2v|t2v|r2v)$/);
+    return match?.[1] ?? null;
   }
 
   async generate(userId: bigint, dto: VideoGenerateDto) {

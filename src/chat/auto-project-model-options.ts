@@ -30,6 +30,10 @@ const COMMON_ASPECT_RATIO_VALUES = ['1:1', '4:3', '3:4', '16:9', '9:16'];
 const DOUBAO_VIDEO_RESOLUTION_VALUES = ['480p', '720p', '1080p'];
 const DOUBAO_VIDEO_RATIO_VALUES = ['16:9', '4:3', '1:1', '3:4', '9:16', '21:9', 'adaptive'];
 const DOUBAO_VIDEO_DURATION_VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
+const WANX_VIDEO_RESOLUTION_VALUES = ['720P', '1080P'];
+const WANX_VIDEO_RATIO_VALUES = ['16:9', '9:16', '1:1', '4:3', '3:4'];
+const WANX_VIDEO_DURATION_VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
+const HAPPYHORSE_VIDEO_DURATION_VALUES = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
 
 function dedupe(values: string[]) {
   return [...new Set(values.map((item) => item.trim()).filter((item) => item.length > 0))];
@@ -99,6 +103,53 @@ function findCanonicalAllowed(value: string | null | undefined, allowed: string[
   }
 
   return null;
+}
+
+function parseDurationNumber(value: string | null | undefined) {
+  const normalizedValue = (value ?? '').trim();
+  if (!normalizedValue) return null;
+
+  const numericMatch = normalizeToken(normalizedValue).match(/(\d{1,3})/);
+  if (!numericMatch?.[1]) return null;
+
+  const numeric = Number(numericMatch[1]);
+  return Number.isFinite(numeric) ? numeric : null;
+}
+
+export function normalizeAutoProjectVideoDuration(
+  value: string | null | undefined,
+  allowedDurations: string[],
+) {
+  const canonical = findCanonicalAllowed(value, allowedDurations);
+  if (canonical) return canonical;
+
+  const numericValue = parseDurationNumber(value);
+  if (numericValue === null) return null;
+
+  if (allowedDurations.length === 0) {
+    return String(numericValue);
+  }
+
+  const numericOptions = allowedDurations
+    .map((option) => {
+      const numeric = parseDurationNumber(option);
+      return numeric === null ? null : { option, numeric };
+    })
+    .filter((item): item is { option: string; numeric: number } => Boolean(item))
+    .sort((left, right) => left.numeric - right.numeric);
+
+  if (numericOptions.length === 0) return null;
+
+  const minOption = numericOptions[0];
+  const maxOption = numericOptions[numericOptions.length - 1];
+  if (numericValue <= minOption.numeric) return minOption.option;
+  if (numericValue >= maxOption.numeric) return maxOption.option;
+
+  return numericOptions.reduce((closest, current) => {
+    const closestDistance = Math.abs(closest.numeric - numericValue);
+    const currentDistance = Math.abs(current.numeric - numericValue);
+    return currentDistance < closestDistance ? current : closest;
+  }).option;
 }
 
 export function getAutoProjectImageOptionCatalog(model: AiModel): AutoProjectModelOptionCatalog {
@@ -172,6 +223,16 @@ export function getAutoProjectVideoOptionCatalog(model: AiModel): AutoProjectMod
     };
   }
 
+  if (provider.includes('wanx') || provider.includes('wanxiang')) {
+    return {
+      aspectRatios: WANX_VIDEO_RATIO_VALUES,
+      resolutions: WANX_VIDEO_RESOLUTION_VALUES,
+      durations: remoteModel.includes('happyhorse-1.0')
+        ? HAPPYHORSE_VIDEO_DURATION_VALUES
+        : WANX_VIDEO_DURATION_VALUES,
+    };
+  }
+
   return {
     aspectRatios: capabilities.supports.sizeSelect ? COMMON_ASPECT_RATIO_VALUES : [],
     resolutions: [],
@@ -223,11 +284,10 @@ export function sanitizeAutoProjectVideoPreferences(
   },
 ) {
   const catalog = getAutoProjectVideoOptionCatalog(model);
-  const provider = normalizeProviderKey(model.provider);
 
   const preferredAspectRatio = findCanonicalAllowed(input.preferredAspectRatio, catalog.aspectRatios);
   const preferredResolution = findCanonicalAllowed(input.preferredResolution, catalog.resolutions);
-  let preferredDuration = findCanonicalAllowed(input.preferredDuration, catalog.durations);
+  const preferredDuration = normalizeAutoProjectVideoDuration(input.preferredDuration, catalog.durations);
 
   return {
     preferredAspectRatio,

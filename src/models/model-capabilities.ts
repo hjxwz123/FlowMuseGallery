@@ -63,15 +63,28 @@ function isWanxProvider(provider: string): boolean {
   return normalizedProvider.includes('wanx') || normalizedProvider.includes('wanxiang');
 }
 
-type Wanx27ModelKind = 't2v' | 'i2v' | 'r2v' | null;
+type WanxModelFamily = 'wan2.7' | 'happyhorse-1.0' | null;
+type WanxModelKind = 't2v' | 'i2v' | 'r2v' | null;
 
-function resolveWanx27ModelKind(remoteModel: string | null): Wanx27ModelKind {
+function resolveWanxModelFamily(remoteModel: string | null): WanxModelFamily {
   const normalizedRemoteModel = (remoteModel ?? '').toLowerCase();
-  if (!normalizedRemoteModel.startsWith('wan2.7')) return null;
+  if (normalizedRemoteModel.startsWith('wan2.7')) return 'wan2.7';
+  if (normalizedRemoteModel.startsWith('happyhorse-1.0')) return 'happyhorse-1.0';
+  return null;
+}
+
+function resolveWanxModelKind(remoteModel: string | null): WanxModelKind {
+  const normalizedRemoteModel = (remoteModel ?? '').toLowerCase();
+  if (!resolveWanxModelFamily(remoteModel)) return null;
   if (normalizedRemoteModel.includes('-t2v')) return 't2v';
   if (normalizedRemoteModel.includes('-i2v')) return 'i2v';
   if (normalizedRemoteModel.includes('-r2v')) return 'r2v';
   return null;
+}
+
+function getWanxModelLabel(family: WanxModelFamily) {
+  if (family === 'happyhorse-1.0') return 'happyhorse-1.0';
+  return 'wan2.7';
 }
 
 function inferImageInputFromProvider(
@@ -84,7 +97,7 @@ function inferImageInputFromProvider(
   if (type === 'image') return imageToImage || isNanoBananaFamily(provider) || isQwenProvider(provider);
 
   if (isWanxProvider(provider)) {
-    const wanxKind = resolveWanx27ModelKind(remoteModel);
+    const wanxKind = resolveWanxModelKind(remoteModel);
     if (wanxKind === 't2v') return false;
     if (wanxKind === 'i2v' || wanxKind === 'r2v') return true;
   }
@@ -110,9 +123,11 @@ function inferVideoInputFromProvider(
   const normalizedRemoteModel = (remoteModel ?? '').toLowerCase();
 
   if (isWanxProvider(provider)) {
-    const wanxKind = resolveWanx27ModelKind(remoteModel);
+    const wanxFamily = resolveWanxModelFamily(remoteModel);
+    const wanxKind = resolveWanxModelKind(remoteModel);
     if (wanxKind === 't2v') return false;
-    if (wanxKind === 'i2v' || wanxKind === 'r2v') return true;
+    if (wanxKind === 'i2v') return true;
+    if (wanxKind === 'r2v') return wanxFamily === 'wan2.7';
   }
 
   if (
@@ -137,7 +152,11 @@ function inferAudioInputFromProvider(
   if (type !== 'video') return false;
 
   if (isWanxProvider(provider)) {
-    return resolveWanx27ModelKind(remoteModel) !== null;
+    const wanxFamily = resolveWanxModelFamily(remoteModel);
+    const wanxKind = resolveWanxModelKind(remoteModel);
+    if (wanxFamily === 'wan2.7') return wanxKind !== null;
+    if (wanxFamily === 'happyhorse-1.0') return wanxKind === 't2v';
+    return false;
   }
 
   const normalizedProvider = normalizeProviderKey(provider);
@@ -169,7 +188,7 @@ function inferContextualEditSupport(
   const normalizedProvider = normalizeProviderKey(provider);
 
   if (type === 'video' && isWanxProvider(provider)) {
-    const wanxKind = resolveWanx27ModelKind(remoteModel);
+    const wanxKind = resolveWanxModelKind(remoteModel);
     if (wanxKind === 't2v') return false;
     if (wanxKind === 'i2v' || wanxKind === 'r2v') return true;
   }
@@ -333,55 +352,65 @@ export function buildModelCapabilities(model: AiModel, providerConfig?: ModelPro
 
     if (providerKey === 'wanx') {
       const normalizedRemoteModel = (remoteModel ?? '').toLowerCase();
-      const wanx27Kind = resolveWanx27ModelKind(remoteModel);
-      const isWan27 = normalizedRemoteModel.includes('wan2.7');
+      const wanxFamily = resolveWanxModelFamily(remoteModel);
+      const wanxKind = resolveWanxModelKind(remoteModel);
+      const wanxLabel = getWanxModelLabel(wanxFamily);
+      const isWan27 = wanxFamily === 'wan2.7';
+      const isHappyhorse = wanxFamily === 'happyhorse-1.0';
       const isWan26 = normalizedRemoteModel.includes('wan2.6');
 
       caps.operationParamKey = null;
-      if (wanx27Kind === 't2v') {
+      if (wanxKind === 't2v') {
         caps.supports.multiImageInput = false;
         caps.limits.maxInputAudios = 1;
         caps.operations = [
           {
             key: 'video-synthesis.t2v',
             execution: 'async',
-            description: '万相 wan2.7 文生视频（提交 /services/aigc/video-generation/video-synthesis，轮询 /tasks/{id}）。',
+            description: `万相 ${wanxLabel} 文生视频（提交 /services/aigc/video-generation/video-synthesis，轮询 /tasks/{id}）。`,
             requiredParameters: ['model', 'prompt'],
-            optionalParameters: ['negativePrompt', 'audioUrl', 'resolution', 'ratio', 'duration', 'prompt_extend', 'watermark', 'seed'],
+            optionalParameters: isWan27
+              ? ['negativePrompt', 'audioUrl', 'resolution', 'ratio', 'duration', 'prompt_extend', 'watermark', 'seed']
+              : ['negativePrompt', 'audioUrl', 'resolution', 'ratio', 'duration', 'watermark', 'seed'],
           },
         ];
         return withAdminOverrides(caps, model, remoteModel);
       }
 
-      if (wanx27Kind === 'i2v') {
+      if (wanxKind === 'i2v') {
         caps.supports.multiImageInput = false;
-        caps.limits.maxInputImages = 2;
+        caps.limits.maxInputImages = isWan27 ? 2 : 1;
         caps.limits.maxInputVideos = 1;
-        caps.limits.maxInputAudios = 1;
+        caps.limits.maxInputAudios = isWan27 ? 1 : undefined;
         caps.operations = [
           {
             key: 'video-synthesis.i2v',
             execution: 'async',
-            description: '万相 wan2.7 图生视频/视频续写（提交 /services/aigc/video-generation/video-synthesis，轮询 /tasks/{id}）。',
+            description: `万相 ${wanxLabel} 图生视频/视频续写（提交 /services/aigc/video-generation/video-synthesis，轮询 /tasks/{id}）。`,
             requiredParameters: ['model'],
-            optionalParameters: ['prompt', 'negativePrompt', 'firstFrame', 'lastFrame', 'firstClip', 'drivingAudio', 'resolution', 'duration', 'prompt_extend', 'watermark', 'seed'],
+            optionalParameters: isWan27
+              ? ['prompt', 'negativePrompt', 'firstFrame', 'lastFrame', 'firstClip', 'drivingAudio', 'resolution', 'duration', 'prompt_extend', 'watermark', 'seed']
+              : ['prompt', 'negativePrompt', 'firstFrame', 'firstClip', 'resolution', 'duration', 'watermark', 'seed'],
           },
         ];
         return withAdminOverrides(caps, model, remoteModel);
       }
 
-      if (wanx27Kind === 'r2v') {
+      if (wanxKind === 'r2v') {
         caps.supports.multiImageInput = true;
         caps.limits.maxInputImages = 5;
-        caps.limits.maxInputVideos = 5;
-        caps.limits.maxInputAudios = 5;
+        caps.limits.maxInputVideos = isWan27 ? 5 : undefined;
+        caps.limits.maxInputAudios = isWan27 ? 5 : undefined;
         caps.operations = [
           {
             key: 'video-synthesis.r2v',
             execution: 'async',
-            description: '万相 wan2.7 参考生视频（提交 /services/aigc/video-generation/video-synthesis，轮询 /tasks/{id}）。',
+            description: `万相 ${wanxLabel} 参考生视频（提交 /services/aigc/video-generation/video-synthesis，轮询 /tasks/{id}）。`,
             requiredParameters: ['model', 'prompt'],
-            optionalParameters: ['negativePrompt', 'referenceImages', 'referenceVideos', 'referenceAudios', 'firstFrame', 'resolution', 'ratio', 'duration', 'prompt_extend', 'watermark', 'seed'],
+            optionalParameters: isWan27
+              ? ['negativePrompt', 'referenceImages', 'referenceVideos', 'referenceAudios', 'firstFrame', 'resolution', 'ratio', 'duration', 'prompt_extend', 'watermark', 'seed']
+              : ['negativePrompt', 'referenceImages', 'resolution', 'ratio', 'duration', 'watermark', 'seed'],
+            notes: isHappyhorse ? ['happyhorse-1.0-r2v 仅支持图片参考。'] : undefined,
           },
         ];
         return withAdminOverrides(caps, model, remoteModel);

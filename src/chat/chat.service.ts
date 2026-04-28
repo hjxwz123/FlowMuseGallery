@@ -2577,9 +2577,84 @@ export class ChatService {
     const remoteModel = String(model.modelKey ?? '').trim().toLowerCase();
     return (
       (providerKey.includes('wanx') || providerKey.includes('wanxiang'))
-      && remoteModel.includes('wan2.7')
+      && (remoteModel.includes('wan2.7') || remoteModel.includes('happyhorse-1.0'))
       && remoteModel.includes('-r2v')
     );
+  }
+
+  private isWanxImageOnlyR2vVideoModel(model: {
+    provider: string;
+    modelKey?: string | null;
+  }) {
+    const providerKey = normalizeProviderKey(model.provider);
+    const remoteModel = String(model.modelKey ?? '').trim().toLowerCase();
+    return (
+      (providerKey.includes('wanx') || providerKey.includes('wanxiang'))
+      && remoteModel.includes('happyhorse-1.0')
+      && remoteModel.includes('-r2v')
+    );
+  }
+
+  private buildWanxSiblingModelKey(
+    model: { modelKey?: string | null },
+    targetKind: 'i2v' | 't2v' | 'r2v',
+  ) {
+    const remoteModel = String(model.modelKey ?? '').trim().toLowerCase();
+    if (!/-r2v$/i.test(remoteModel)) return null;
+    return remoteModel.replace(/-r2v$/i, `-${targetKind}`);
+  }
+
+  private async requireWanxSiblingVideoModel(
+    model: AiModel,
+    targetKind: 'i2v' | 't2v' | 'r2v',
+  ) {
+    const siblingModelKey = this.buildWanxSiblingModelKey(model, targetKind);
+    if (!siblingModelKey) {
+      throw new BadRequestException('Wanx sibling video model is not available for the selected model');
+    }
+
+    const siblingModel = await this.prisma.aiModel.findFirst({
+      where: {
+        type: AiModelType.video,
+        isActive: true,
+        provider: model.provider,
+        modelKey: siblingModelKey,
+      },
+    }) ?? await this.prisma.aiModel.findFirst({
+      where: {
+        type: AiModelType.video,
+        isActive: true,
+        modelKey: siblingModelKey,
+      },
+    });
+    if (!siblingModel) {
+      throw new BadRequestException(`Wanx sibling video model ${siblingModelKey} is not configured or inactive`);
+    }
+
+    return siblingModel;
+  }
+
+  private stripWanxReferenceParameters(parameters: Record<string, unknown>) {
+    [
+      'firstFrame',
+      'first_frame',
+      'lastFrame',
+      'last_frame',
+      'firstClip',
+      'first_clip',
+      'drivingAudio',
+      'driving_audio',
+      'audioUrl',
+      'audio_url',
+      'referenceImages',
+      'reference_images',
+      'referenceVideos',
+      'reference_videos',
+      'referenceAudios',
+      'reference_audios',
+    ].forEach((key) => {
+      delete parameters[key];
+    });
   }
 
   private buildWanxR2vContextVideoParameters(input: {
@@ -2587,10 +2662,12 @@ export class ChatService {
     currentVideos: string[];
     currentAudios: string[];
     firstFrameImage?: string | null;
+    imageOnlyReferences?: boolean;
   }) {
     const parameters: Record<string, unknown> = {};
     const firstFrame = input.firstFrameImage?.trim() || null;
-    const totalVisualBudget = Math.max(0, 5 - (firstFrame ? 1 : 0));
+    const imageOnlyReferences = input.imageOnlyReferences === true;
+    const totalVisualBudget = imageOnlyReferences ? 5 : Math.max(0, 5 - (firstFrame ? 1 : 0));
 
     let referenceImages = input.currentImages
       .map((item) => item.trim())
@@ -2598,6 +2675,10 @@ export class ChatService {
     let referenceVideos = input.currentVideos
       .map((item) => item.trim())
       .filter((item) => Boolean(item));
+
+    if (imageOnlyReferences) {
+      referenceVideos = [];
+    }
 
     if (referenceImages.length === 0 && referenceVideos.length === 0 && firstFrame) {
       referenceImages = [firstFrame];
@@ -2612,16 +2693,16 @@ export class ChatService {
       .filter((item) => Boolean(item))
       .slice(0, visualCount);
 
-    if (firstFrame) {
+    if (firstFrame && !imageOnlyReferences) {
       parameters.firstFrame = firstFrame;
     }
     if (cappedImages.length > 0) {
       parameters.referenceImages = cappedImages;
     }
-    if (cappedVideos.length > 0) {
+    if (cappedVideos.length > 0 && !imageOnlyReferences) {
       parameters.referenceVideos = cappedVideos;
     }
-    if (cappedAudios.length > 0) {
+    if (cappedAudios.length > 0 && !imageOnlyReferences) {
       parameters.referenceAudios = cappedAudios;
     }
 
@@ -3395,8 +3476,9 @@ export class ChatService {
     const fallbackVideo = input.latestContextAsset?.resultUrl ?? null;
 
     if (this.isWanxR2vVideoModel(model)) {
+      const imageOnlyReferences = this.isWanxImageOnlyR2vVideoModel(model);
       const mergedReferenceVideos = [...input.currentVideos];
-      if (mergedReferenceVideos.length === 0 && fallbackVideo) {
+      if (!imageOnlyReferences && mergedReferenceVideos.length === 0 && fallbackVideo) {
         mergedReferenceVideos.push(fallbackVideo);
       }
 
@@ -3405,6 +3487,7 @@ export class ChatService {
         currentVideos: mergedReferenceVideos,
         currentAudios: input.currentAudios,
         firstFrameImage: fallbackImage,
+        imageOnlyReferences,
       });
     }
 
@@ -3550,17 +3633,38 @@ export class ChatService {
     parameters?: Record<string, unknown>;
   }) {
     const videoModelId = this.parseBigInt(params.videoModelIdRaw, 'modelId');
-    const videoModel = await this.prisma.aiModel.findFirst({
+    const requestedVideoModel = await this.prisma.aiModel.findFirst({
       where: {
         id: videoModelId,
         type: AiModelType.video,
         isActive: true,
       },
     });
-    if (!videoModel) {
+    if (!requestedVideoModel) {
       throw new BadRequestException('Video model not found or inactive');
     }
 
+    const requestedImages = params.currentImages
+      .map((item) => item.trim())
+      .filter((item) => Boolean(item));
+    const requestedVideos = params.currentVideos
+      .map((item) => item.trim())
+      .filter((item) => Boolean(item));
+    const requestedAudios = params.currentAudios
+      .map((item) => item.trim())
+      .filter((item) => Boolean(item));
+    const shouldUseWanxTextOnlyModel =
+      this.isWanxR2vVideoModel(requestedVideoModel) &&
+      requestedImages.length === 0 &&
+      requestedVideos.length === 0 &&
+      requestedAudios.length === 0 &&
+      params.useConversationContextEdit !== true;
+    const videoModel = shouldUseWanxTextOnlyModel
+      ? await this.requireWanxSiblingVideoModel(requestedVideoModel, 't2v')
+      : requestedVideoModel;
+    const videoModelIdRaw = shouldUseWanxTextOnlyModel
+      ? videoModel.id.toString()
+      : params.videoModelIdRaw;
     const videoModelCapabilities = buildModelCapabilities(videoModel as AiModel, null);
     const supportsContextVideoEditing = this.supportsMediaAgentVideoModel(
       videoModel,
@@ -3568,49 +3672,44 @@ export class ChatService {
     );
 
     if (
-      (params.currentImages.length > 0 ||
-        params.currentVideos.length > 0 ||
-        params.currentAudios.length > 0 ||
+      (requestedImages.length > 0 ||
+        requestedVideos.length > 0 ||
+        requestedAudios.length > 0 ||
         params.useConversationContextEdit) &&
       !supportsContextVideoEditing
     ) {
       throw new BadRequestException('Current video model does not support context editing in chat');
     }
 
-    if (params.currentImages.length > 0 && !videoModelCapabilities.supports.imageInput) {
+    if (requestedImages.length > 0 && !videoModelCapabilities.supports.imageInput) {
       throw new BadRequestException('Current video model does not support image references');
     }
-    if (params.currentVideos.length > 0 && !videoModelCapabilities.supports.videoInput) {
+    if (requestedVideos.length > 0 && !videoModelCapabilities.supports.videoInput) {
       throw new BadRequestException('Current video model does not support video references');
     }
-    if (params.currentAudios.length > 0 && !videoModelCapabilities.supports.audioInput) {
+    if (requestedAudios.length > 0 && !videoModelCapabilities.supports.audioInput) {
       throw new BadRequestException('Current video model does not support audio references');
     }
 
+    const extraParameters = params.parameters ? { ...params.parameters } : {};
+    if (shouldUseWanxTextOnlyModel) {
+      this.stripWanxReferenceParameters(extraParameters);
+    }
     const mergedParameters = {
       ...buildChatVideoTaskParameters(videoModel, {
         preferredAspectRatio: params.preferredAspectRatio ?? null,
         preferredResolution: params.preferredResolution ?? null,
         preferredDuration: params.preferredDuration ?? null,
       }),
-      ...(params.parameters ? { ...params.parameters } : {}),
+      ...extraParameters,
     };
     const maxInputImages = Math.max(1, videoModelCapabilities.limits.maxInputImages ?? 1);
     const maxInputVideos = Math.max(1, videoModelCapabilities.limits.maxInputVideos ?? 1);
     const maxInputAudios = Math.max(1, videoModelCapabilities.limits.maxInputAudios ?? 1);
 
-    const currentImages = params.currentImages
-      .map((item) => item.trim())
-      .filter((item) => Boolean(item))
-      .slice(0, maxInputImages);
-    const currentVideos = params.currentVideos
-      .map((item) => item.trim())
-      .filter((item) => Boolean(item))
-      .slice(0, maxInputVideos);
-    const currentAudios = params.currentAudios
-      .map((item) => item.trim())
-      .filter((item) => Boolean(item))
-      .slice(0, maxInputAudios);
+    const currentImages = requestedImages.slice(0, maxInputImages);
+    const currentVideos = requestedVideos.slice(0, maxInputVideos);
+    const currentAudios = requestedAudios.slice(0, maxInputAudios);
 
     const latestContextAsset = params.useConversationContextEdit
       ? (
@@ -3634,7 +3733,7 @@ export class ChatService {
     );
 
     const createdTask = await this.videosService.generate(params.userId, {
-      modelId: params.videoModelIdRaw,
+      modelId: videoModelIdRaw,
       prompt: params.prompt,
       parameters: Object.keys(mergedParameters).length > 0 ? mergedParameters : undefined,
       projectId: params.projectId ? params.projectId.toString() : undefined,

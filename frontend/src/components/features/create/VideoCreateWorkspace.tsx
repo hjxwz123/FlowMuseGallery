@@ -90,6 +90,10 @@ export interface VideoCreateWorkspaceProps {
   isWanx27Video: boolean
   wanxResolvedModelKind: 't2v' | 'i2v' | 'r2v' | null
   wanxSupportsAudioInput: boolean
+  wanxAllowsReferenceVideoInputs: boolean
+  wanxSupportsFirstFrameInput: boolean
+  wanxSupportsLastFrameInput: boolean
+  wanxReferenceVideosAreContinuationOnly: boolean
   wanxCanCustomizeRatio: boolean
   wanxHasReferenceVideoInputs: boolean
   wanxVideoContinuationEnabled: boolean
@@ -211,6 +215,10 @@ export function VideoCreateWorkspace({
   isWanx27Video,
   wanxResolvedModelKind,
   wanxSupportsAudioInput,
+  wanxAllowsReferenceVideoInputs,
+  wanxSupportsFirstFrameInput,
+  wanxSupportsLastFrameInput,
+  wanxReferenceVideosAreContinuationOnly,
   wanxCanCustomizeRatio,
   wanxHasReferenceVideoInputs,
   wanxVideoContinuationEnabled,
@@ -874,7 +882,7 @@ export function VideoCreateWorkspace({
 
             {isWanxVideo && (supportsImageInput || wanxSupportsAudioInput) && (
               <div className="space-y-4">
-                {isWanxMergedVideo && wanxHasReferenceVideoInputs ? (
+                {isWanxMergedVideo && wanxHasReferenceVideoInputs && !wanxReferenceVideosAreContinuationOnly ? (
                   <div className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white/80 px-4 py-3 dark:border-stone-700 dark:bg-stone-900/70">
                     <span className="text-sm font-medium">{t('form.uploadReference.labelWanxVideoContinuation')}</span>
                     <Switch
@@ -886,7 +894,7 @@ export function VideoCreateWorkspace({
                 ) : null}
 
                 <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
-                  {supportsImageInput ? (
+                  {supportsImageInput && wanxAllowsReferenceVideoInputs ? (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between gap-3">
                         <label className="text-sm font-medium">
@@ -914,6 +922,7 @@ export function VideoCreateWorkspace({
                       <div className="flex items-center justify-between gap-3">
                         <label className="text-sm font-medium">
                           {isWanxI2v
+                            || wanxReferenceVideosAreContinuationOnly
                             ? t('form.uploadReference.labelWanxContinuationVideo')
                             : t('form.uploadReference.labelWanxReferenceVideos')}
                         </label>
@@ -938,7 +947,7 @@ export function VideoCreateWorkspace({
                     <div className="space-y-2">
                       <div className="flex items-center justify-between gap-3">
                         <label className="text-sm font-medium">
-                          {isWanxR2v
+                          {isWanxR2v || wanxResolvedModelKind === 't2v'
                             ? t('form.uploadReference.labelWanxReferenceAudios')
                             : t('form.uploadReference.labelWanxDrivingAudio')}
                         </label>
@@ -959,7 +968,7 @@ export function VideoCreateWorkspace({
                     </div>
                   ) : null}
 
-                  {isWanx27Video && (supportsImageInput || isWanxMergedVideo) ? (
+                  {wanxSupportsFirstFrameInput ? (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between gap-3">
                         <label className="text-sm font-medium">
@@ -981,7 +990,7 @@ export function VideoCreateWorkspace({
                     </div>
                   ) : null}
 
-                  {(isWanxMergedVideo || isWanxI2v) && isWanx27Video ? (
+                  {wanxSupportsLastFrameInput && (isWanxMergedVideo || isWanxI2v) ? (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between gap-3">
                         <label className="text-sm font-medium">
