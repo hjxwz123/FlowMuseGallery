@@ -167,6 +167,7 @@ Uploaded documents are parsed into text and used as chat context.
 | Database | SQLite, Prisma |
 | Desktop | Electron, electron-builder |
 | File processing | Sharp, Multer, PDF / DOCX / PPTX / XLSX parsing |
+| Video composition | FFmpeg, FFprobe (required when merging storyboard videos) |
 | Task execution | Backend in-process local task runner |
 
 ## 🚀 Quick Start
@@ -179,7 +180,37 @@ cd frontend && npm install
 cd ..
 ```
 
-### 2. Configure environment variables
+### 2. Install FFmpeg (required for composition)
+
+If you only use image generation, video generation, and regular task management, you can skip this step at first. If you need video composition features such as "Merge Storyboard", the runtime environment must be able to access the `ffmpeg` and `ffprobe` commands.
+
+macOS:
+
+```bash
+brew install ffmpeg
+```
+
+Ubuntu / Debian:
+
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+Windows:
+
+```powershell
+winget install Gyan.FFmpeg
+```
+
+Verify the commands after installation:
+
+```bash
+ffmpeg -version
+ffprobe -version
+```
+
+### 3. Configure environment variables
 
 ```bash
 cp .env.example .env
@@ -199,7 +230,7 @@ APP_ENCRYPTION_KEY="change-me-32-bytes-minimum-length"
 
 > `APP_ENCRYPTION_KEY` encrypts stored API keys. Replace it with your own long random string before first launch.
 
-### 3. Initialize the database
+### 4. Initialize the database
 
 ```bash
 npm run prisma:generate
@@ -208,7 +239,7 @@ npm run prisma:init
 
 Initialization creates the SQLite schema and writes fixed providers, built-in models, and local user data.
 
-### 4. Start browser mode
+### 5. Start browser mode
 
 ```bash
 npm run dev:all
