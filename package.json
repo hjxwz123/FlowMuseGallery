@@ -28,7 +28,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "@nestjs/common": "^10.4.20",
@@ -81,6 +81,7 @@
     },
     "files": [
       "electron/**/*",
+      "build/icon.png",
       "scripts/**/*",
       "dist/**/*",
       "frontend/dist/**/*",
@@ -109,12 +110,14 @@
       "target": [
         "dmg"
       ],
+      "icon": "build/icon.icns",
       "category": "public.app-category.productivity"
     },
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "icon": "build/icon.ico"
     }
   }
 }

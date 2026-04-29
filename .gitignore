@@ -5,6 +5,11 @@ frontend/node_modules
 # builds
 dist
 build
+!build/
+build/*
+!build/icon.icns
+!build/icon.ico
+!build/icon.png
 frontend/.next
 frontend/out
 frontend/build

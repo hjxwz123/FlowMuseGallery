@@ -27,11 +27,13 @@ export const Logo = ({ className, variant = 'default' }: LogoProps) => {
       )}
     >
       {/* Logo Icon */}
-      <div className="relative h-10 w-10">
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-aurora-pink via-aurora-purple to-aurora-blue opacity-100" />
-        <div className="absolute inset-[2px] rounded-full bg-canvas dark:bg-canvas-dark flex items-center justify-center">
-          <span className="font-display text-lg font-bold text-aurora-purple">F</span>
-        </div>
+      <div className="relative h-10 w-10 overflow-hidden rounded-xl">
+        <img
+          src="/icons/icon-192x192.png"
+          alt=""
+          className="h-full w-full object-cover"
+          aria-hidden="true"
+        />
       </div>
 
       {/* Brand Name */}

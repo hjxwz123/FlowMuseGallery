@@ -261,6 +261,7 @@ async function createWindow(frontendUrl) {
     minWidth: 1024,
     minHeight: 720,
     title: 'FlowMuse',
+    icon: appPath('build', 'icon.png'),
     backgroundColor: nativeThemeBackground(),
     webPreferences: {
       contextIsolation: true,

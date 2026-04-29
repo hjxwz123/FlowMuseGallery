@@ -28,7 +28,6 @@ type TaskFilter = 'all' | TaskStatus
 type UnifiedTask = ApiTask
 
 const TASKS_CACHE_MAX_AGE_MS = 5 * 60 * 1000
-const TASKS_CACHE_FRESH_MS = 20 * 1000
 
 function sortTasksByCreatedAtDesc(items: UnifiedTask[]) {
   return [...items].sort(
@@ -152,11 +151,9 @@ export function TasksContent() {
       setPage(cached.page)
       setHasMore(cached.hasMore)
       setError(null)
-      setIsLoading(false)
+      setIsLoading(cached.tasks.length === 0)
 
-      if (cached.page === 1 && Date.now() - cached.cachedAt > TASKS_CACHE_FRESH_MS) {
-        void loadTasks(1, false, { silent: true })
-      }
+      void loadTasks(1, false, { silent: cached.tasks.length > 0 })
       return
     }
 

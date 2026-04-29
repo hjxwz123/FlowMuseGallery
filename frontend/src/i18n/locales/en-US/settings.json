@@ -71,23 +71,21 @@
     }
   },
   "chatModels": {
-    "title": "Chat Model Settings",
+    "title": "Chat Models",
     "refresh": "Refresh",
     "add": "Add Chat Model",
     "empty": "No chat models",
-    "configure": "Configure",
+    "configure": "Edit",
     "deleteConfirm": "Delete chat model \"{name}\"?",
     "dragAria": "Drag sort {name}",
     "modal": {
       "add": "Add Chat Model",
-      "edit": "Configure Chat Model"
+      "edit": "Edit Chat Model"
     },
     "fields": {
       "name": "Display Name",
       "modelKey": "Request Model Name",
       "icon": "Icon",
-      "description": "Model Description",
-      "systemPrompt": "System Message",
       "maxContextRounds": "Context Rounds",
       "sortOrder": "Sort"
     },

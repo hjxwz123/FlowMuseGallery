@@ -672,30 +672,6 @@ export function ChatModelManagerSection({ apiConfigured }: { apiConfigured: bool
             </div>
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-stone-700 dark:text-stone-200">
-              {t('fields.description')}
-            </label>
-            <textarea
-              value={draft.description}
-              onChange={(event) => setDraftField('description', event.target.value)}
-              className={cn(inputClassName, 'min-h-[96px] resize-y')}
-              maxLength={10000}
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-stone-700 dark:text-stone-200">
-              {t('fields.systemPrompt')}
-            </label>
-            <textarea
-              value={draft.systemPrompt}
-              onChange={(event) => setDraftField('systemPrompt', event.target.value)}
-              className={cn(inputClassName, 'min-h-[160px] resize-y font-mono text-xs')}
-              maxLength={10000}
-            />
-          </div>
-
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-stone-700 dark:text-stone-200">

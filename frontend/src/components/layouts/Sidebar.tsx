@@ -214,32 +214,10 @@ export function Sidebar({ forceCollapsed: _forceCollapsed = false }: SidebarProp
         <TooltipShell label={SITE_TITLE}>
           <Link
             href={`/${locale}`}
-            className="flex h-11 w-11 items-center justify-center text-stone-900 transition-transform duration-300 hover:scale-110 dark:text-white"
+            className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl transition-transform duration-300 hover:scale-110"
             aria-label={SITE_TITLE}
           >
-            <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 2L2 7L12 12L22 7L12 2Z"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M2 12L12 17L22 12"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M2 17L12 22L22 17"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <img src="/icons/icon-192x192.png" alt="" className="h-full w-full object-cover" aria-hidden="true" />
           </Link>
         </TooltipShell>
 

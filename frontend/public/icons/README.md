@@ -1,4 +1,4 @@
-需要在此目录放置以下图标文件：
+此目录中的图标由仓库根目录的 `logo.png` 生成，用于网站 favicon、PWA manifest、README 顶部 Logo 和应用内产品 Logo。
 
 - icon-72x72.png
 - icon-96x96.png
@@ -9,5 +9,3 @@
 - icon-192x192.png
 - icon-384x384.png
 - icon-512x512.png
-
-请参考 frontend/PWA_ICONS_GUIDE.md 了解如何生成这些图标。

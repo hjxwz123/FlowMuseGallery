@@ -74,7 +74,7 @@
     "preferencesHint": "手动选择画幅时，会覆盖智能体默认的自动比例策略。",
     "aspectUnsupported": "当前模型没有额外的比例选项，将使用默认或模型自适应比例。",
     "contextUnsupported": "当前模型不支持聊天上下文编辑。请仅使用文本描述，或前往创作页进行图生图。",
-    "inputPlaceholder": "上传参考图、输入创意描述，我会先判断是直接创作还是继续追问优化",
+    "inputPlaceholder": "上传参考图、输入创意描述",
     "modelUnavailable": "暂无可用绘图模型",
     "cardTitle": "绘图任务",
     "cancelTask": "取消任务",

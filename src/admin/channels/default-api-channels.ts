@@ -8,6 +8,7 @@ export type DefaultApiChannel = {
   id: number;
   name: string;
   provider: string;
+  baseUrl: string;
   timeout: number;
   maxRetry: number;
   priority: number;
@@ -25,7 +26,7 @@ export async function upsertDefaultApiChannels(prisma: PrismaService) {
         id: BigInt(channel.id),
         name: channel.name,
         provider: channel.provider,
-        baseUrl: '',
+        baseUrl: channel.baseUrl,
         apiKey: null,
         apiSecret: null,
         extraHeaders: null,
@@ -46,6 +47,18 @@ export async function upsertDefaultApiChannels(prisma: PrismaService) {
         description: null,
       },
     });
+
+    if (channel.baseUrl) {
+      await prisma.apiChannel.updateMany({
+        where: {
+          id: BigInt(channel.id),
+          baseUrl: '',
+        },
+        data: {
+          baseUrl: channel.baseUrl,
+        },
+      });
+    }
   }
 }
 

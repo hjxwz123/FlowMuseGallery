@@ -78,7 +78,7 @@ async function main() {
         id: BigInt(channel.id),
         name: channel.name,
         provider: channel.provider,
-        baseUrl: '',
+        baseUrl: channel.baseUrl,
         apiKey: null,
         apiSecret: null,
         extraHeaders: null,
@@ -99,6 +99,18 @@ async function main() {
         description: null,
       },
     });
+
+    if (channel.baseUrl) {
+      await prisma.apiChannel.updateMany({
+        where: {
+          id: BigInt(channel.id),
+          baseUrl: '',
+        },
+        data: {
+          baseUrl: channel.baseUrl,
+        },
+      });
+    }
   }
 
   for (const model of defaultAiModels) {

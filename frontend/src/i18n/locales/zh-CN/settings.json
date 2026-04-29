@@ -71,23 +71,21 @@
     }
   },
   "chatModels": {
-    "title": "对话模型配置",
+    "title": "对话模型",
     "refresh": "刷新",
     "add": "新增对话模型",
     "empty": "暂无对话模型",
-    "configure": "配置",
+    "configure": "编辑",
     "deleteConfirm": "确认删除对话模型「{name}」吗？",
     "dragAria": "拖拽排序 {name}",
     "modal": {
       "add": "新增对话模型",
-      "edit": "配置对话模型"
+      "edit": "编辑对话模型"
     },
     "fields": {
       "name": "模型显示名称",
       "modelKey": "实际请求模型名",
       "icon": "图标",
-      "description": "模型描述",
-      "systemPrompt": "系统消息",
       "maxContextRounds": "上下文轮数",
       "sortOrder": "排序"
     },
@@ -97,7 +95,7 @@
     "uploadImage": "上传图片",
     "supportsVision": "支持识图",
     "noVision": "不支持识图",
-    "saveConfig": "保存配置",
+    "saveConfig": "保存",
     "createModel": "创建模型",
     "errors": {
       "loadFailed": "加载对话模型配置失败",

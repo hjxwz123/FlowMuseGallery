@@ -74,7 +74,7 @@
     "preferencesHint": "A manual aspect ratio here overrides the agent's default automatic ratio behavior.",
     "aspectUnsupported": "This model has no extra aspect-ratio choices, so it will use the model default or adaptive ratio.",
     "contextUnsupported": "This model does not support chat context image editing. Use text only, or go to Create for image-to-image editing.",
-    "inputPlaceholder": "Upload references and describe your idea. I will decide whether to create now or refine it first.",
+    "inputPlaceholder": "Upload references and describe your idea.",
     "modelUnavailable": "No image model available",
     "cardTitle": "Image task",
     "cancelTask": "Cancel task",

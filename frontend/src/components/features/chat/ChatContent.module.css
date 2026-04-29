@@ -408,7 +408,7 @@
   position: relative;
   width: 100%;
   z-index: 10;
-  min-height: 82px;
+  min-height: 52px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
