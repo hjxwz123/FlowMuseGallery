@@ -352,7 +352,6 @@ release/                        桌面打包产物
 | 类型 | 路径 |
 | --- | --- |
 | 图片提示词 | `frontend/public/json/prompts.json` |
-| 视频提示词 | `frontend/public/json/prompts-videos.json` |
 
 图片提示词来源：
 
