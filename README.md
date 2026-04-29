@@ -1,4 +1,8 @@
 <p align="center">
+  <a href="README.en.md">English</a>
+</p>
+
+<p align="center">
   <img src="frontend/public/icons/icon-192x192.png" width="96" height="96" alt="FlowMuse logo" />
 </p>
 
@@ -380,6 +384,8 @@ cd frontend && npm run type-check
 ```text
 https://github.com/hjxwz123/FlowMuseGallery
 ```
+
+友情链接：[LinuxDo](https://linux.do/)
 
 ## 📄 License
 
